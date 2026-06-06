@@ -1,10 +1,12 @@
 <?php
-$hostname = isset($_ENV['MYSQLHOST']) ? $_ENV['MYSQLHOST'] : (getenv('MYSQLHOST') ?: 'localhost');
-$username = isset($_ENV['MYSQLUSER']) ? $_ENV['MYSQLUSER'] : (getenv('MYSQLUSER') ?: 'root');
-$password = isset($_ENV['MYSQLPASSWORD']) ? $_ENV['MYSQLPASSWORD'] : (getenv('MYSQLPASSWORD') ?: '');
-$database = isset($_ENV['MYSQLDATABASE']) ? $_ENV['MYSQLDATABASE'] : (getenv('MYSQLDATABASE') ?: 'railway');
-$port     = isset($_ENV['MYSQLPORT']) ? $_ENV['MYSQLPORT'] : (getenv('MYSQLPORT') ?: '3306');
+// Credenciales privadas fijas de Railway
+$hostname = "mysql.railway.internal"; 
+$username = "root"; 
+$password = "oCeSKpDsYnzHWrJwbfPhTISkvMMuLqiZ"; // Tu contraseña real de las capturas
+$database = "railway"; // El nombre de la base de datos que vimos que creó Railway
+$port     = "3306"; 
 
+// Conexión
 $conn = mysqli_connect($hostname, $username, $password, $database, $port);
 
 if (!$conn) {
