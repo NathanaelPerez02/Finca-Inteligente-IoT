@@ -5,11 +5,11 @@ session_start();
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $usuario = mysqli_real_escape_string($conexion, $_POST['usuario']);
+    $usuario = mysqli_real_escape_string($conn, $_POST['usuario']); 
     $password = $_POST['password'];
 
     $consulta = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
-    $resultado = mysqli_query($conexion, $consulta);
+    $resultado = mysqli_query($conn, $consulta);
 
     if ($resultado && mysqli_num_rows($resultado) > 0) {
         $datos_usuario = mysqli_fetch_assoc($resultado);
