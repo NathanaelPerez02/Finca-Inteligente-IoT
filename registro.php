@@ -1,24 +1,23 @@
 <?php
 include("conexion.php");
-
-$mensaje = "";
+$error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $usuario = mysqli_real_escape_string($conexion, $_POST['usuario']);
-    $password = $_POST['password'];
+    $usuario = mysqli_real_escape_string($conn, $_POST['usuario']);
+    $password_plana = $_POST['password'];
     
-    $password_encriptada = password_hash($password, PASSWORD_BCRYPT);
+    $password_encriptada = password_hash($password_plana, PASSWORD_DEFAULT);
 
-    $verificar = mysqli_query($conexion, "SELECT * FROM usuarios WHERE usuario = '$usuario'");
-    
-    if (mysqli_num_rows($verificar) > 0) {
-        $mensaje = "<p class='error'>El nombre de usuario ya está en uso.</p>";
+    $verificar = mysqli_query($conn, "SELECT * FROM usuarios WHERE usuario = '$usuario'");
+    if(mysqli_num_rows($verificar) > 0) {
+        $error = "El nombre de usuario ya está en uso.";
     } else {
-        $insertar = "INSERT INTO usuarios (usuario, password) VALUES ('$usuario', '$password_encriptada')";
-        if (mysqli_query($conexion, $insertar)) {
-            $mensaje = "<p class='exito'>¡Registro exitoso! <a href='login.php'>Inicia sesión aquí</a></p>";
+        $sql = "INSERT INTO usuarios (usuario, password) VALUES ('$usuario', '$password_encriptada')";
+        if (mysqli_query($conn, $sql)) {
+            header("Location: login.php?registro=exitoso");
+            exit();
         } else {
-            $mensaje = "<p class='error'>Error al registrar el usuario.</p>";
+            $error = "Error al registrar: " . mysqli_error($conn);
         }
     }
 }
@@ -32,22 +31,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-
     <div class="card">
         <h2>🌱 Crear Cuenta</h2>
         
-        <?php echo $mensaje; ?>
+        <?php if(!empty($error)) { echo "<p class='error'>$error</p>"; } ?>
         
-        <form method="POST" action="">
+        <form method="POST" action="registro.php">
             <input type="text" name="usuario" placeholder="Elige un Usuario" required>
-            <input type="password" name="password" placeholder="Elige una Contraseña" required>
-            <button type="submit">Registrarme</button>
+            <input type="password" name="password" placeholder="Crea una Contraseña" required>
+            <button type="submit">Registrarse</button>
         </form>
         
         <p style="margin-top: 20px;">
-            <a href="login.php">Volver al Login</a>
+            <a href="login.php">¿Ya tienes cuenta? Inicia sesión</a>
         </p>
     </div>
-
+    <script src="js/main.js"></script>
 </body>
 </html>

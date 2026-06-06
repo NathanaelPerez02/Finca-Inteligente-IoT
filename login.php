@@ -1,11 +1,10 @@
 <?php
 include("conexion.php");
 session_start();
-
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $usuario = mysqli_real_escape_string($conn, $_POST['usuario']); 
+    $usuario = mysqli_real_escape_string($conn, $_POST['usuario']);
     $password = $_POST['password'];
 
     $consulta = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
@@ -35,13 +34,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-
     <div class="card">
         <h2>🚜 Iniciar Sesión</h2>
         
         <?php if(!empty($error)) { echo "<p class='error'>$error</p>"; } ?>
+        <?php if(isset($_GET['registro']) && $_GET['registro'] == 'exitoso') { echo "<p class='exito'>¡Registro completado! Ya puedes loguearte.</p>"; } ?>
         
-        <form method="POST" action="">
+        <form method="POST" action="login.php">
             <input type="text" name="usuario" placeholder="Nombre de Usuario" required>
             <input type="password" name="password" placeholder="Contraseña" required>
             <button type="submit">Ingresar</button>
@@ -51,6 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="registro.php">¿No tienes cuenta? Regístrate aquí</a>
         </p>
     </div>
-
+    <script src="js/main.js"></script>
 </body>
 </html>

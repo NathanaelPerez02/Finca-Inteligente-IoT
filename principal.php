@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
     exit();
@@ -15,35 +14,18 @@ if (!isset($_SESSION['usuario'])) {
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
+    <div class="welcome-container" style="max-width: 600px;">
+        <h1>🌱 Panel de Control</h1>
+        <p>Bienvenido al sistema de monitoreo, <strong><?php echo htmlspecialchars($_SESSION['usuario']); ?></strong>.</p>
+        
+        <div class="card" style="background: #121214; margin: 20px 0; max-width: 100%;">
+            <p>Aquí se integrarán las lecturas de los sensores IoT y el control de actuadores.</p>
+        </div>
 
-    <div class="navbar">
-        <h2>🚜 Panel Finca Inteligente</h2>
-        <div>
-            <span>Bienvenido, <strong><?php echo htmlspecialchars($_SESSION['usuario']); ?></strong></span>
-            <a href="logout.php" class="btn-logout">Cerrar Sesión</a>
+        <div class="button-group">
+            <a href="logout.php" class="btn" style="background:#f87171; color:white;">Cerrar Sesión</a>
         </div>
     </div>
-
-    <div class="container">
-        <h1>Monitoreo Agrícola e IoT</h1>
-        <p class="section-desc">Estado en tiempo real de la arquitectura Maestro-Esclavo.</p>
-
-        <div class="dashboard-grid">
-            <div class="card-iot">
-                <h3>Temperatura</h3>
-                <p class="dato" id="temp-val">-- °C</p>
-            </div>
-            <div class="card-iot">
-                <h3>Humedad del Suelo</h3>
-                <p class="dato" id="hum-val">-- %</p>
-            </div>
-            <div class="card-iot">
-                <h3>Acceso Vehicular</h3>
-                <p class="dato puerta-cerrada" id="puerta-val">Cerrado</p>
-            </div>
-        </div>
-    </div>
-
-    <script src="js/sensores.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
