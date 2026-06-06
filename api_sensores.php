@@ -39,12 +39,18 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua'])) 
                 $mail->isSMTP();
                 $mail->Host       = 'smtp.gmail.com';
                 $mail->SMTPAuth   = true;
-                $mail->Username   = getenv('EMAIL_USER'); 
-                $mail->Password   = getenv('EMAIL_PASS');
+                
+                // Buscamos la variable en múltiples lugares por compatibilidad con Railway
+                $correo_bot = getenv('EMAIL_USER') ?: $_SERVER['EMAIL_USER'];
+                $pass_bot   = getenv('EMAIL_PASS') ?: $_SERVER['EMAIL_PASS'];
+
+                $mail->Username   = $correo_bot; 
+                $mail->Password   = $pass_bot;
+                
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
                 $mail->Port       = 465;
 
-                $mail->setFrom(getenv('EMAIL_USER'), 'Alertas AgroGate');
+                $mail->setFrom($correo_bot, 'Alertas AgroGate');
                 $mail->addAddress($email_destino);
 
                 $mail->isHTML(true);
