@@ -1,15 +1,22 @@
 <?php
-// Credenciales privadas fijas de Railway
-$hostname = "mysql.railway.internal"; 
-$username = "root"; 
-$password = "oCeSKpDsYnzHWrJwbfPhTISkvMMuLqiZ"; // Tu contraseña real de las capturas
-$database = "railway"; // El nombre de la base de datos que vimos que creó Railway
-$port     = "3306"; 
+if (getenv('MYSQLHOST')) {
+    $hostname = "mysql.railway.internal";
+    $username = "root";
+    $password = "oCeSKpDsYnzHWrJwbfPhTISkvMMuLqiZ";
+    $database = "railway";
+    $port     = "3306";
+} else {
+    $hostname = "localhost";
+    $username = "root";
+    $password = "";
+    $database = "railway";
+    $port     = "3306";
+}
 
-// Conexión
 $conn = mysqli_connect($hostname, $username, $password, $database, $port);
+$conexion = $conn;
 
 if (!$conn) {
-    die("Error de conexión a la base de datos: " . mysqli_connect_error());
+    die("Error crítico de conexión a la Base de Datos: " . mysqli_connect_error());
 }
 ?>
