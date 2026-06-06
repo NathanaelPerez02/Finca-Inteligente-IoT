@@ -40,8 +40,22 @@ $datos_user = mysqli_fetch_assoc($consulta);
         <h1>🌱 Panel de Control</h1>
         <p>Bienvenido al sistema de monitoreo, <strong><?php echo htmlspecialchars($_SESSION['usuario']); ?></strong>.</p>
         
-        <div class="card" style="background: #121214; margin: 20px 0; max-width: 100%;">
-            <p>Aquí se integrarán las lecturas de los sensores IoT y el control de actuadores.</p>
+        <div style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+            <div class="card" style="background: #1e1e24; flex: 1; text-align: center; min-width: 200px;">
+                <h3 style="color: #60a5fa; margin-bottom: 5px;">💧 Nivel de Piscina</h3>
+                <h1 style="font-size: 3.5rem; margin: 10px 0; color: white;">
+                    <?php echo htmlspecialchars($datos_user['agua_actual'] ?? '0'); ?>%
+                </h1>
+                <p style="color: #a1a1aa; font-size: 14px;">Umbral de alerta: <?php echo htmlspecialchars($datos_user['umbral_agua'] ?? '30'); ?>%</p>
+            </div>
+
+            <div class="card" style="background: #1e1e24; flex: 1; text-align: center; min-width: 200px;">
+                <h3 style="color: #fbbf24; margin-bottom: 5px;">🪴 Humedad de Suelo</h3>
+                <h1 style="font-size: 3.5rem; margin: 10px 0; color: white;">
+                    <?php echo htmlspecialchars($datos_user['humedad_actual'] ?? '0'); ?>%
+                </h1>
+                <p style="color: #a1a1aa; font-size: 14px;">Umbral de alerta: <?php echo htmlspecialchars($datos_user['umbral_humedad'] ?? '30'); ?>%</p>
+            </div>
         </div>
 
         <div class="card" style="background: #1e1e24; margin: 20px 0; max-width: 100%; text-align: left;">

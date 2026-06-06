@@ -16,6 +16,8 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua'])) 
     
     if (mysqli_num_rows($consulta) > 0) {
         $datos = mysqli_fetch_assoc($consulta);
+        $sql_actualizar_datos = "UPDATE usuarios SET humedad_actual = $humedad_actual, agua_actual = $agua_actual WHERE usuario = '$usuario'";
+        mysqli_query($conn, $sql_actualizar_datos);
         $umbral_humedad = $datos['umbral_humedad'];
         $umbral_agua = $datos['umbral_agua'];
         $email_destino = $datos['email_alertas'];
