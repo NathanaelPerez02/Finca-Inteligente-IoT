@@ -1,12 +1,13 @@
 <?php
-$host = "sql311.infinityfree.com"; 
-$usuario = "if0_42110124";     
-$clave = "HWfJ6KG9o5";      
-$base_datos = "if0_42110124_finca";  
+$hostname = "mysql.railway.internal"; 
+$username = "root"; 
+$password = "oCeSKpDsYnzHWrJwbfPhTISkvMMuLqiZ"; 
+$database = "railway"; 
+$port     = "3306"; 
 
-$conexion = mysqli_connect($host, $usuario, $clave, $base_datos);
+$conn = mysqli_connect($hostname, $username, $password, $database, $port);
 
-if (!$conexion) {
+if (!$conn) {
     die("Error de conexión a la base de datos: " . mysqli_connect_error());
 }
 ?>
