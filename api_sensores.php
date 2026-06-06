@@ -38,19 +38,23 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua'])) 
             $mail = new PHPMailer(true);
 
             try {
+                // --- MODO DEPURACIÓN Y TIMEOUT ---
+                $mail->SMTPDebug = 2; // Activa el "modo chismoso" para ver qué está fallando
+                $mail->Timeout   = 10; // Si Google no responde en 10 segundos, aborta y lanza error
+                
                 $mail->isSMTP();
                 $mail->Host       = 'smtp.gmail.com';
                 $mail->SMTPAuth   = true;
                 
-                // Buscamos la variable en múltiples lugares por compatibilidad con Railway
                 $correo_bot = getenv('EMAIL_USER') ?: $_SERVER['EMAIL_USER'];
                 $pass_bot   = getenv('EMAIL_PASS') ?: $_SERVER['EMAIL_PASS'];
 
                 $mail->Username   = $correo_bot; 
                 $mail->Password   = $pass_bot;
                 
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-                $mail->Port       = 465;
+                // --- CAMBIAMOS EL PUERTO Y LA SEGURIDAD PARA QUE RAILWAY NO LO BLOQUEE ---
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Usamos TLS en lugar de SSL
+                $mail->Port       = 587; // Puerto 587 en lugar del 465
 
                 $mail->setFrom($correo_bot, 'Alertas AgroGate');
                 $mail->addAddress($email_destino);
@@ -61,9 +65,9 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua'])) 
                 $mail->AltBody = strip_tags($alertas); 
 
                 $mail->send();
-                echo 'Alerta enviada por correo. ';
+                echo '<br><br><b>¡Alerta enviada por correo exitosamente!</b>';
             } catch (Exception $e) {
-                echo "Error al enviar correo: {$mail->ErrorInfo} ";
+                echo "<br><br><b>Error crítico al enviar:</b> {$mail->ErrorInfo} ";
             }
         } else {
             echo "Datos normales, no se requiere enviar alerta. ";
