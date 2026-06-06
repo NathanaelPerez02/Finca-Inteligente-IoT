@@ -43,7 +43,7 @@ $datos_user = mysqli_fetch_assoc($consulta);
         <div style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
             <div class="card" style="background: #1e1e24; flex: 1; text-align: center; min-width: 200px;">
                 <h3 style="color: #60a5fa; margin-bottom: 5px;">💧 Nivel de Piscina</h3>
-                <h1 style="font-size: 3.5rem; margin: 10px 0; color: white;">
+                <h1 id="valor_agua" style="font-size: 3.5rem; margin: 10px 0; color: white;">
                     <?php echo htmlspecialchars($datos_user['agua_actual'] ?? '0'); ?>%
                 </h1>
                 <p style="color: #a1a1aa; font-size: 14px;">Umbral de alerta: <?php echo htmlspecialchars($datos_user['umbral_agua'] ?? '30'); ?>%</p>
@@ -51,7 +51,7 @@ $datos_user = mysqli_fetch_assoc($consulta);
 
             <div class="card" style="background: #1e1e24; flex: 1; text-align: center; min-width: 200px;">
                 <h3 style="color: #fbbf24; margin-bottom: 5px;">🪴 Humedad de Suelo</h3>
-                <h1 style="font-size: 3.5rem; margin: 10px 0; color: white;">
+                <h1 id="valor_humedad" style="font-size: 3.5rem; margin: 10px 0; color: white;">
                     <?php echo htmlspecialchars($datos_user['humedad_actual'] ?? '0'); ?>%
                 </h1>
                 <p style="color: #a1a1aa; font-size: 14px;">Umbral de alerta: <?php echo htmlspecialchars($datos_user['umbral_humedad'] ?? '30'); ?>%</p>
@@ -81,5 +81,23 @@ $datos_user = mysqli_fetch_assoc($consulta);
         </div>
     </div>
     <script src="js/main.js"></script>
+    <script>
+        // Esta función va a buscar los datos nuevos
+        function actualizarSensores() {
+            fetch('get_datos.php')
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+                    if(!datos.error) {
+                        // Cambiamos los números en la pantalla al instante
+                        document.getElementById('valor_agua').innerText = datos.agua_actual + '%';
+                        document.getElementById('valor_humedad').innerText = datos.humedad_actual + '%';
+                    }
+                })
+                .catch(error => console.log('Error actualizando:', error));
+        }
+
+        // Le decimos que ejecute la función cada 3000 milisegundos (3 segundos)
+        setInterval(actualizarSensores, 3000);
+    </script>
 </body>
 </html>
