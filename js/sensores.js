@@ -1,0 +1,1 @@
+console.log("Sistema IoT de monitoreo agrícola acoplado.");
