@@ -14,9 +14,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $datos_usuario = mysqli_fetch_assoc($resultado);
         
         if (password_verify($password, $datos_usuario['password'])) {
-            $_SESSION['usuario'] = $usuario;
-            header("Location: principal.php");
-            exit();
+            // VALIDACIÓN DE SEGURIDAD
+            if ($datos_usuario['verificado'] == 1) {
+                $_SESSION['usuario'] = $usuario;
+                header("Location: principal.php");
+                exit();
+            } else {
+                // Si la contraseña es correcta pero no ha validado el correo
+                $error = "Tu cuenta aún no está activada. Por favor, haz clic en el enlace que enviamos a tu correo electrónico.";
+            }
         } else {
             $error = "Contraseña incorrecta.";
         }
@@ -38,7 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>🚜 Iniciar Sesión</h2>
         
         <?php if(!empty($error)) { echo "<p class='error'>$error</p>"; } ?>
-        <?php if(isset($_GET['registro']) && $_GET['registro'] == 'exitoso') { echo "<p class='exito'>¡Registro completado! Ya puedes loguearte.</p>"; } ?>
+        
+        <?php if(isset($_GET['registro']) && $_GET['registro'] == 'pendiente') { echo "<p class='exito' style='color: #fbbf24;'>¡Registro casi listo! Revisa tu correo (y la carpeta de SPAM) para activar tu cuenta.</p>"; } ?>
         
         <form method="POST" action="login.php">
             <input type="text" name="usuario" placeholder="Nombre de Usuario" required>
