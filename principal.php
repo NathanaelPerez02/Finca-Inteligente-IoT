@@ -41,8 +41,15 @@ $datos_user = mysqli_fetch_assoc($consulta);
         <p>Bienvenido al sistema de monitoreo, <strong><?php echo htmlspecialchars($_SESSION['usuario']); ?></strong>.</p>
         
         <div style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+            
+            <div id="tarjeta_acceso" class="card" style="background: #1e1e24; flex: 1; text-align: center; min-width: 200px; border: 2px solid #60a5fa; width: 100%;">
+                <h3 style="color: #60a5fa; margin-bottom: 5px;">🚧 Seguridad de Acceso</h3>
+                <h1 id="estado_acceso" style="font-size: 2.2rem; margin: 10px 0; color: white;">Detectando...</h1>
+                <p id="distancia_real" style="color: #a1a1aa; font-size: 14px;">Calculando proximidad</p>
+            </div>
+
             <div class="card" style="background: #1e1e24; flex: 1; text-align: center; min-width: 200px;">
-                <h3 style="color: #60a5fa; margin-bottom: 5px;">💧 Nivel de Piscina</h3>
+                <h3 style="color: #38bdf8; margin-bottom: 5px;">💧 Nivel de Piscina</h3>
                 <h1 id="valor_agua" style="font-size: 3.5rem; margin: 10px 0; color: white;">
                     <?php echo htmlspecialchars($datos_user['agua_actual'] ?? '0'); ?>%
                 </h1>
@@ -82,21 +89,35 @@ $datos_user = mysqli_fetch_assoc($consulta);
     </div>
     <script src="js/main.js"></script>
     <script>
-        // Esta función va a buscar los datos nuevos
         function actualizarSensores() {
             fetch('get_datos.php')
                 .then(respuesta => respuesta.json())
                 .then(datos => {
                     if(!datos.error) {
-                        // Cambiamos los números en la pantalla al instante
                         document.getElementById('valor_agua').innerText = datos.agua_actual + '%';
                         document.getElementById('valor_humedad').innerText = datos.humedad_actual + '%';
+                        
+                        let distancia = parseInt(datos.agua_actual) || 0;
+                        let tarjeta = document.getElementById('tarjeta_acceso');
+                        let textoEstado = document.getElementById('estado_acceso');
+                        let textoDistancia = document.getElementById('distancia_real');
+
+                        textoDistancia.innerText = "Distancia detectada: " + distancia + " cm";
+
+                        if (distancia > 0 && distancia < 50) { 
+                            textoEstado.innerText = "❌ OBSTÁCULO";
+                            textoEstado.style.color = "#f87171";
+                            tarjeta.style.borderColor = "#f87171";
+                        } else {
+                            textoEstado.innerText = "🟢 ACCESO LIBRE";
+                            textoEstado.style.color = "#4ade80";
+                            tarjeta.style.borderColor = "#4ade80";
+                        }
                     }
                 })
                 .catch(error => console.log('Error actualizando:', error));
         }
 
-        // Le decimos que ejecute la función cada 3000 milisegundos (3 segundos)
         setInterval(actualizarSensores, 3000);
     </script>
 </body>
