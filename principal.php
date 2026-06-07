@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['actualizar_umbrales'])
 $consulta = mysqli_query($conn, "SELECT * FROM usuarios WHERE usuario = '$usuario_actual'");
 $datos_user = mysqli_fetch_assoc($consulta);
 
-$distancia_inicial = (int)($datos_user['agua_actual'] ?? 100); 
+$distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100); 
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -117,7 +117,7 @@ $distancia_inicial = (int)($datos_user['agua_actual'] ?? 100);
                         document.getElementById('valor_agua').innerText = datos.agua_actual + '%';
                         document.getElementById('valor_humedad').innerText = datos.humedad_actual + '%';
                         
-                        let distancia = parseInt(datos.distancia) || parseInt(datos.agua_actual) || 100;
+                        let distancia = parseInt(datos.acceso_actual) || 100;
                         
                         let tarjeta = document.getElementById('tarjeta_acceso');
                         let tituloAcceso = document.getElementById('titulo_acceso');
