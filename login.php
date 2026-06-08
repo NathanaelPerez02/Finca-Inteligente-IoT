@@ -43,7 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>🚜 Iniciar Sesión</h2>
         
         <?php if(!empty($error)) { echo "<p class='error'>$error</p>"; } ?>
-        <?php if(isset($_GET['registro']) && $_GET['registro'] == 'pendiente') { echo "<p class='exito' style='color: #fbbf24;'>¡Registro casi listo! Revisa tu correo (y la carpeta de SPAM) para activar tu cuenta.</p>"; } ?>
+        
+        <?php if(isset($_GET['registro']) && $_GET['registro'] == 'pendiente') { echo "<p class='exito' style='color: white; background-color: #059669; padding: 12px; border-radius: 5px; font-weight: bold; font-size: 14px;'>¡Registro casi listo! Revisa tu correo (y la carpeta de SPAM) para activar tu cuenta.</p>"; } ?>
         
         <form method="POST" action="login.php">
             <input type="text" name="identificador" placeholder="Usuario o Correo Electrónico" required>
@@ -69,10 +70,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             var eye = document.getElementById(eyeId);
             if (input.type === "password") {
                 input.type = "text";
-                eye.className = "fas fa-eye-slash"; // Cambia al ícono de ojo tachado
+                eye.className = "fas fa-eye-slash";
             } else {
                 input.type = "password";
-                eye.className = "fas fa-eye"; // Vuelve al ícono normal
+                eye.className = "fas fa-eye";
             }
         }
     </script>

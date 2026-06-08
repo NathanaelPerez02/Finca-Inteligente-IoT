@@ -13,15 +13,15 @@ $mensaje_exito = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['actualizar_umbrales'])) {
     $umbral_humedad = (int)$_POST['umbral_humedad'];
     $umbral_agua = (int)$_POST['umbral_agua'];
-    $email_alertas = mysqli_real_escape_string($conn, $_POST['email_alertas']);
 
-    $sql_update = "UPDATE usuarios SET umbral_humedad = $umbral_humedad, umbral_agua = $umbral_agua, email_alertas = '$email_alertas' WHERE usuario = '$usuario_actual'";
+    $sql_update = "UPDATE usuarios SET umbral_humedad = $umbral_humedad, umbral_agua = $umbral_agua WHERE usuario = '$usuario_actual'";
     
     if(mysqli_query($conn, $sql_update)){
-        $mensaje_exito = "¡Configuración de alertas actualizada!";
+        $mensaje_exito = "¡Configuración de niveles actualizada!";
     }
 }
 
+// Cargar los datos actuales del usuario
 $consulta = mysqli_query($conn, "SELECT * FROM usuarios WHERE usuario = '$usuario_actual'");
 $datos_user = mysqli_fetch_assoc($consulta);
 
@@ -85,8 +85,8 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
         </div>
 
         <div class="card" style="background: #1e1e24; margin: 20px 0; max-width: 100%; text-align: left;">
-            <h3 style="color: #4ade80; margin-bottom: 15px;">⚙️ Configurar Alertas por Correo</h3>
-            <?php if(!empty($mensaje_exito)) { echo "<p class='exito'>$mensaje_exito</p>"; } ?>
+            <h3 style="color: #4ade80; margin-bottom: 15px;">⚙️ Configurar Niveles de Alerta</h3>
+            <?php if(!empty($mensaje_exito)) { echo "<p class='exito' style='color: white; background-color: #059669; padding: 10px; border-radius: 5px; font-weight: bold;'>$mensaje_exito</p>"; } ?>
             
             <form method="POST" action="principal.php">
                 <label style="color: #a1a1aa; font-size: 14px;">Umbral mínimo Humedad Suelo (%):</label>
@@ -95,10 +95,22 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
                 <label style="color: #a1a1aa; font-size: 14px;">Umbral mínimo Nivel Piscina (%):</label>
                 <input type="number" name="umbral_agua" value="<?php echo htmlspecialchars($datos_user['umbral_agua'] ?? '30'); ?>" required>
                 
-                <label style="color: #a1a1aa; font-size: 14px;">Correo para recibir alertas:</label>
-                <input type="email" name="email_alertas" placeholder="ejemplo@correo.com" value="<?php echo htmlspecialchars($datos_user['email_alertas'] ?? ''); ?>">
-                
                 <button type="submit" name="actualizar_umbrales" style="margin-top: 10px;">Guardar Configuración</button>
+            </form>
+        </div>
+
+        <div class="card" style="background: #1e1e24; margin-bottom: 20px;">
+            <h3 style="color: #c084fc; margin-bottom: 10px;">🕹️ Simulador de Hardware</h3>
+            <p style="color: #a1a1aa; font-size: 14px; margin-bottom: 15px;">Usa este panel para simular los datos que enviaría la placa física.</p>
+            
+            <form action="api_sensores.php" target="_blank" method="GET" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <input type="hidden" name="usuario" value="<?php echo htmlspecialchars($datos_user['usuario'] ?? 'oldtote'); ?>">
+                
+                <input type="number" name="agua" placeholder="Nivel Piscina (%)" required style="flex: 1; min-width: 120px; padding: 10px; border-radius: 5px; border: 1px solid #3f3f46; background: #27272a; color: white;">
+                
+                <input type="number" name="humedad" placeholder="Humedad Suelo (%)" required style="flex: 1; min-width: 120px; padding: 10px; border-radius: 5px; border: 1px solid #3f3f46; background: #27272a; color: white;">
+                
+                <button type="submit" style="background: #c084fc; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Simular Envío</button>
             </form>
         </div>
 
@@ -107,6 +119,7 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
         </div>
     </div>
 
+    
     <script src="js/main.js"></script>
     <script>
         function actualizarSensores() {
@@ -155,7 +168,7 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
                 .catch(error => console.log('Error actualizando sensores:', error));
         }
 
-        setInterval(actualizarSensores, 2000);
+        setInterval(actualizarSensores, 3000);
     </script>
 </body>
 </html>
