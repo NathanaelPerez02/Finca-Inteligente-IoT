@@ -39,9 +39,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="card">
-        <h2>🚜 Iniciar Sesión</h2>
+    <main class="login-main">
+        <div class="card">
+        <h2>Iniciar Sesión</h2>
         
+         <?php if(!empty($error)) { echo "<p class='error'>$error</p>"; } ?>
+        <?php if(isset($_GET['registro']) && $_GET['registro'] == 'exitoso') { echo "<p class='exito'>¡Registro completado! Ya puedes loguearte.</p>"; } ?>
         <?php if(!empty($error)) { echo "<p class='error'>$error</p>"; } ?>
         
         <?php if(isset($_GET['registro']) && $_GET['registro'] == 'pendiente') { echo "<p class='exito' style='color: white; background-color: #059669; padding: 12px; border-radius: 5px; font-weight: bold; font-size: 14px;'>¡Registro casi listo! Revisa tu correo (y la carpeta de SPAM) para activar tu cuenta.</p>"; } ?>
@@ -63,6 +66,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="registro.php">¿No tienes cuenta? Regístrate aquí</a>
         </p>
     </div>
+    </main>
+    
+    <script src="js/main.js"></script>
 
     <script>
         function togglePass(inputId, eyeId) {

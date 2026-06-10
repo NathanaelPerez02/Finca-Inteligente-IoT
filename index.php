@@ -7,15 +7,19 @@
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-    <div class="welcome-container">
-        <h1>🚜 Finca Inteligente IoT</h1>
-        <p>Monitoreo agrícola automatizado mediante arquitectura Maestro-Esclavo.</p>
-        
-        <div class="button-group">
-            <a href="login.php" class="btn">Iniciar Sesión</a>
-            <a href="registro.php" class="btn" style="background:#3f3f46; color:white;">Registrarse</a>
+    <main class="welcome-main">
+        <div class="welcome-container">
+            <h2>Bienvenido a</h2>
+            <h1>Finca Inteligente IoT</h1>
+            <p>Monitoreo agrícola automatizado mediante arquitectura Maestro-Esclavo.</p>
+            
+            <div class="button-group">
+                <a href="login.php" class="btn">Iniciar Sesión</a>
+                <a href="registro.php" class="btn" style="background:#3f3f46; color:white;">Registrarse</a>
+            </div>
         </div>
-    </div>
+    </main>
+    
     <script src="js/main.js"></script>
 </body>
 </html>
