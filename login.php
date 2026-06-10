@@ -4,24 +4,28 @@ session_start();
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $usuario = mysqli_real_escape_string($conn, $_POST['usuario']);
+    $identificador = mysqli_real_escape_string($conn, $_POST['identificador']);
     $password = $_POST['password'];
 
-    $consulta = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
+    $consulta = "SELECT * FROM usuarios WHERE usuario = '$identificador' OR email_alertas = '$identificador'";
     $resultado = mysqli_query($conn, $consulta);
 
     if ($resultado && mysqli_num_rows($resultado) > 0) {
         $datos_usuario = mysqli_fetch_assoc($resultado);
         
         if (password_verify($password, $datos_usuario['password'])) {
-            $_SESSION['usuario'] = $usuario;
-            header("Location: principal.php");
-            exit();
+            if ($datos_usuario['verificado'] == 1) {
+                $_SESSION['usuario'] = $datos_usuario['usuario'];
+                header("Location: principal.php");
+                exit();
+            } else {
+                $error = "Tu cuenta aún no está activada. Por favor, haz clic en el enlace que enviamos a tu correo electrónico.";
+            }
         } else {
             $error = "Contraseña incorrecta.";
         }
     } else {
-        $error = "El usuario no existe.";
+        $error = "El usuario o correo no existe.";
     }
 }
 ?>
@@ -32,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Finca Inteligente</title>
     <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <main class="login-main">
@@ -40,10 +45,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
          <?php if(!empty($error)) { echo "<p class='error'>$error</p>"; } ?>
         <?php if(isset($_GET['registro']) && $_GET['registro'] == 'exitoso') { echo "<p class='exito'>¡Registro completado! Ya puedes loguearte.</p>"; } ?>
+        <?php if(!empty($error)) { echo "<p class='error'>$error</p>"; } ?>
+        
+        <?php if(isset($_GET['registro']) && $_GET['registro'] == 'pendiente') { echo "<p class='exito' style='color: white; background-color: #059669; padding: 12px; border-radius: 5px; font-weight: bold; font-size: 14px;'>¡Registro casi listo! Revisa tu correo (y la carpeta de SPAM) para activar tu cuenta.</p>"; } ?>
         
         <form method="POST" action="login.php">
-            <input type="text" name="usuario" placeholder="Nombre de Usuario" required>
-            <input type="password" name="password" placeholder="Contraseña" required>
+            <input type="text" name="identificador" placeholder="Usuario o Correo Electrónico" required>
+            
+            <div style="position: relative; width: 100%; margin-bottom: 15px;">
+                <input type="password" name="password" id="pass_login" placeholder="Contraseña" required style="width: 100%; box-sizing: border-box; margin-bottom: 0;">
+                <button type="button" onclick="togglePass('pass_login', 'eye_login')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #a1a1aa; font-size: 16px;">
+                    <i id="eye_login" class="fas fa-eye"></i>
+                </button>
+            </div>
+
             <button type="submit">Ingresar</button>
         </form>
         
@@ -54,5 +69,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </main>
     
     <script src="js/main.js"></script>
+
+    <script>
+        function togglePass(inputId, eyeId) {
+            var input = document.getElementById(inputId);
+            var eye = document.getElementById(eyeId);
+            if (input.type === "password") {
+                input.type = "text";
+                eye.className = "fas fa-eye-slash";
+            } else {
+                input.type = "password";
+                eye.className = "fas fa-eye";
+            }
+        }
+    </script>
 </body>
 </html>
