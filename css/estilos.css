@@ -1,8 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap');
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 body {
@@ -13,26 +14,63 @@ body {
     align-items: center;
     min-height: 100vh;
 }
-
+.welcome-main{
+background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/fondo2.svg');    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100vh;
+    filter: brightness(-10);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login-main{
+     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/fondo3.svg');    background-size: cover;
+     background-position: center;
+     background-repeat: no-repeat;
+     width: 100%;
+     height: 100vh;
+     filter: brightness(-10);
+     display: flex;
+     justify-content: center;
+     align-items: center;
+    }
 .card, .welcome-container {
-    background: #1e1e24;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
     padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    border-radius: 32px;
     width: 100%;
     max-width: 450px;
     text-align: center;
-    border: 1px solid #2a2a32;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+
+.welcome-container h1{
+    font-weight: 400;
+    font-size: 40px;
+    color: #F8FAFC;
+    font-family: 'Poppins', sans-serif;
+}
+.welcome-container h2{
+    color: #94A3B8;
 }
 
 h2, h1 {
     margin-bottom: 20px;
-    color: #4ade80;
+    color: #10B981;
+    font-family: 'Poppins', sans-serif;
+
 }
 
 p {
-    color: #a1a1aa;
+    color: #94A3B8;
     margin-bottom: 20px;
+    font-family: Inter;
 }
 
 form {
@@ -52,12 +90,12 @@ input {
 }
 
 input:focus {
-    border-color: #4ade80;
+    border-color:#10B981;
     outline: none;
 }
 
 button, .btn {
-    background: #4ade80;
+    background: #10B981;
     color: #121214;
     border: none;
     padding: 12px;
@@ -71,7 +109,7 @@ button, .btn {
 }
 
 button:hover, .btn:hover {
-    background: #22c55e;
+    background: #10B981;
 }
 
 .button-group {
@@ -90,7 +128,7 @@ button:hover, .btn:hover {
 }
 
 .exito {
-    background: #4ade80;
+    background: #10B981;
     color: #121214;
     padding: 10px;
     border-radius: 6px;
@@ -99,7 +137,7 @@ button:hover, .btn:hover {
 }
 
 a {
-    color: #4ade80;
+    color: #10B981;
     text-decoration: none;
 }
 

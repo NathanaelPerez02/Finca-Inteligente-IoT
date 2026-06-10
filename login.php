@@ -34,10 +34,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-    <div class="card">
-        <h2>🚜 Iniciar Sesión</h2>
+    <main class="login-main">
+        <div class="card">
+        <h2>Iniciar Sesión</h2>
         
-        <?php if(!empty($error)) { echo "<p class='error'>$error</p>"; } ?>
+         <?php if(!empty($error)) { echo "<p class='error'>$error</p>"; } ?>
         <?php if(isset($_GET['registro']) && $_GET['registro'] == 'exitoso') { echo "<p class='exito'>¡Registro completado! Ya puedes loguearte.</p>"; } ?>
         
         <form method="POST" action="login.php">
@@ -50,6 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="registro.php">¿No tienes cuenta? Regístrate aquí</a>
         </p>
     </div>
+    </main>
+    
     <script src="js/main.js"></script>
 </body>
 </html>

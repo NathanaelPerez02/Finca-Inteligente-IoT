@@ -31,8 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-    <div class="card">
-        <h2>🌱 Crear Cuenta</h2>
+    <main class="login-main">
+<div class="card">
+        <h2>Crear Cuenta</h2>
         
         <?php if(!empty($error)) { echo "<p class='error'>$error</p>"; } ?>
         
@@ -46,6 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="login.php">¿Ya tienes cuenta? Inicia sesión</a>
         </p>
     </div>
+    </main>
+    
     <script src="js/main.js"></script>
 </body>
 </html>
