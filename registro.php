@@ -67,8 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="card">
-        <h2>🌱 Crear Cuenta</h2>
+    <main class="login-main">
+<div class="card" style="max-width: 450px;">
+        <h2>Crear Cuenta</h2>
         
         <?php if(!empty($error)) { echo "<p class='error'>$error</p>"; } ?>
         
@@ -97,6 +98,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="login.php">¿Ya tienes cuenta? Inicia sesión</a>
         </p>
     </div>
+    </main>
+    
+    <script src="js/main.js"></script>
 
     <script>
         function togglePass(inputId, eyeId) {
