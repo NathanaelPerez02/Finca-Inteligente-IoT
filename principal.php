@@ -26,6 +26,8 @@ $consulta = mysqli_query($conn, "SELECT * FROM usuarios WHERE usuario = '$usuari
 $datos_user = mysqli_fetch_assoc($consulta);
 
 $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100); 
+// Obtener el historial de lecturas (últimos 10 registros)
+$query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM historial_lecturas WHERE usuario = '$usuario_actual' ORDER BY id DESC LIMIT 10");
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -99,6 +101,34 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
             </form>
         </div>
 
+        <div class="card" style="background: #1e1e24; margin-bottom: 20px; overflow-x: auto;">
+            <h3 style="color: #a78bfa; margin-bottom: 15px;">📊 Historial de Lecturas</h3>
+            <table style="width: 100%; border-collapse: collapse; text-align: center; color: white; font-size: 14px;">
+                <thead>
+                    <tr style="border-bottom: 1px solid #3f3f46;">
+                        <th style="padding: 10px;">Fecha y Hora</th>
+                        <th style="padding: 10px;">Humedad (%)</th>
+                        <th style="padding: 10px;">Piscina (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($query_historial && mysqli_num_rows($query_historial) > 0) {
+                        while ($fila = mysqli_fetch_assoc($query_historial)) {
+                            echo "<tr style='border-bottom: 1px solid #3f3f46;'>";
+                            echo "<td style='padding: 10px; color: #a1a1aa;'>" . htmlspecialchars($fila['fecha']) . "</td>";
+                            echo "<td style='padding: 10px; color: #fbbf24;'>" . htmlspecialchars($fila['humedad']) . "%</td>";
+                            echo "<td style='padding: 10px; color: #60a5fa;'>" . htmlspecialchars($fila['agua']) . "%</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='3' style='padding: 15px; color: #a1a1aa;'>Aún no hay registros en el historial.</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+
         <div class="card" style="background: #1e1e24; margin-bottom: 20px;">
             <h3 style="color: #c084fc; margin-bottom: 10px;">🕹️ Simulador de Hardware</h3>
             <p style="color: #a1a1aa; font-size: 14px; margin-bottom: 15px;">Usa este panel para simular los datos que enviaría la placa física.</p>
@@ -163,12 +193,19 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
                             tarjeta.style.borderColor = "#4ade80";
                             tarjeta.classList.remove("card-ocupada-anim");
                         }
+                        // Recargar la página silenciosamente cada 30 segundos para actualizar la tabla del historial
+                        // sin interrumpir la experiencia de los grandes números en tiempo real
                     }
                 })
                 .catch(error => console.log('Error actualizando sensores:', error));
         }
 
         setInterval(actualizarSensores, 3000);
+        
+        // Refresca la tabla del historial cada 1 minuto (60000ms)
+        setInterval(() => {
+            location.reload();
+        }, 60000);
     </script>
 </body>
 </html>
