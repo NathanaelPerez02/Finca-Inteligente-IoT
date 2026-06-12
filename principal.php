@@ -25,6 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['actualizar_umbrales'])
 // Cargar los datos actuales del usuario
 $consulta = mysqli_query($conn, "SELECT * FROM usuarios WHERE usuario = '$usuario_actual'");
 $datos_user = mysqli_fetch_assoc($consulta);
+
+// Obtener el historial de lecturas (últimos 10 registros)
+$query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM historial_lecturas WHERE usuario = '$usuario_actual' ORDER BY id DESC LIMIT 10");
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -72,6 +75,34 @@ $datos_user = mysqli_fetch_assoc($consulta);
             </form>
         </div>
 
+        <div class="card" style="background: #1e1e24; margin-bottom: 20px; overflow-x: auto;">
+            <h3 style="color: #a78bfa; margin-bottom: 15px;">📊 Historial de Lecturas</h3>
+            <table style="width: 100%; border-collapse: collapse; text-align: center; color: white; font-size: 14px;">
+                <thead>
+                    <tr style="border-bottom: 1px solid #3f3f46;">
+                        <th style="padding: 10px;">Fecha y Hora</th>
+                        <th style="padding: 10px;">Humedad (%)</th>
+                        <th style="padding: 10px;">Piscina (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($query_historial && mysqli_num_rows($query_historial) > 0) {
+                        while ($fila = mysqli_fetch_assoc($query_historial)) {
+                            echo "<tr style='border-bottom: 1px solid #3f3f46;'>";
+                            echo "<td style='padding: 10px; color: #a1a1aa;'>" . htmlspecialchars($fila['fecha']) . "</td>";
+                            echo "<td style='padding: 10px; color: #fbbf24;'>" . htmlspecialchars($fila['humedad']) . "%</td>";
+                            echo "<td style='padding: 10px; color: #60a5fa;'>" . htmlspecialchars($fila['agua']) . "%</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='3' style='padding: 15px; color: #a1a1aa;'>Aún no hay registros en el historial.</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+
         <div class="card" style="background: #1e1e24; margin-bottom: 20px;">
             <h3 style="color: #c084fc; margin-bottom: 10px;">🕹️ Simulador de Hardware</h3>
             <p style="color: #a1a1aa; font-size: 14px; margin-bottom: 15px;">Usa este panel para simular los datos que enviaría la placa física.</p>
@@ -101,12 +132,20 @@ $datos_user = mysqli_fetch_assoc($consulta);
                     if(!datos.error) {
                         document.getElementById('valor_agua').innerText = datos.agua_actual + '%';
                         document.getElementById('valor_humedad').innerText = datos.humedad_actual + '%';
+                        
+                        // Recargar la página silenciosamente cada 30 segundos para actualizar la tabla del historial
+                        // sin interrumpir la experiencia de los grandes números en tiempo real
                     }
                 })
                 .catch(error => console.log('Error actualizando:', error));
         }
 
         setInterval(actualizarSensores, 3000);
+        
+        // Refresca la tabla del historial cada 1 minuto (60000ms)
+        setInterval(() => {
+            location.reload();
+        }, 60000);
     </script>
 </body>
 </html>
