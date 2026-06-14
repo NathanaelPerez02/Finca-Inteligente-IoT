@@ -79,25 +79,25 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
         <div style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
             
             <div id="tarjeta_modo" class="card" style="border: 2px solid #a78bfa; width: 100%;">
-                <h3 style="color: #a78bfa; margin-bottom: 5px;">⚙️ MODO DEL SISTEMA</h3>
+                <h3 style="color: #a78bfa; margin-bottom: 5px;">MODO DEL SISTEMA</h3>
                 <h1 id="estado_modo" style="font-size: 2.2rem; margin: 10px 0; color: white;">CARGANDO...</h1>
             </div>
 
             <div id="tarjeta_acceso" class="card" style="border: 2px solid #4ade80; width: 100%;">
-                <h3 id="titulo_acceso" style="color: #4ade80; margin-bottom: 5px;">🟢 ACCESO LIBRE</h3>
-                <h1 id="estado_acceso" style="font-size: 2.2rem; margin: 10px 0; color: white;">DESPEJADO</h1>
+                <h3 id="titulo_acceso" style="color: #4ade80; margin-bottom: 5px;">ZONA</h3>
+                <h1 id="estado_acceso" style="font-size: 2.2rem; margin: 10px 0; color: white;">DESPEJADA</h1>
                 <p id="distancia_real" style="color: #a1a1aa; font-size: 14px;">Distancia detectada: <?php echo $distancia_inicial; ?> cm</p>
             </div>
 
             <div class="card">
-                <h3 style="color: #38bdf8; margin-bottom: 5px;">💧 Nivel de Piscina</h3>
+                <h3 style="color: #38bdf8; margin-bottom: 5px;">Nivel de Piscina</h3>
                 <h1 id="valor_agua" style="font-size: 3.5rem; margin: 10px 0; color: white;">
                     <?php echo htmlspecialchars($datos_user['agua_actual'] ?? '0'); ?>%
                 </h1>
             </div>
 
             <div class="card">
-                <h3 style="color: #fbbf24; margin-bottom: 5px;">🪴 Humedad Suelo</h3>
+                <h3 style="color: #fbbf24; margin-bottom: 5px;">Humedad Suelo</h3>
                 <h1 id="valor_humedad" style="font-size: 3.5rem; margin: 10px 0; color: white;">
                     <?php echo htmlspecialchars($datos_user['humedad_actual'] ?? '0'); ?>%
                 </h1>
@@ -106,15 +106,15 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
 
         <div style="display: flex; gap: 15px; margin-bottom: 20px;">
             <button onclick="abrirModal('modalAbrir')" style="flex: 1; padding: 15px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                🔓 Apertura Remota
+                Apertura Remota
             </button>
             <button onclick="abrirModal('modalTarjeta')" style="flex: 1; padding: 15px; background: #8b5cf6; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                💳 Registrar Nueva Tarjeta
+                Registrar Nueva Tarjeta
             </button>
         </div>
 
         <div class="card" style="background: #1e1e24; margin: 20px 0; max-width: 100%; text-align: left;">
-            <h3 style="color: #4ade80; margin-bottom: 15px;">⚙️ Configurar Niveles de Alerta</h3>
+            <h3 style="color: #4ade80; margin-bottom: 15px;">Configurar Niveles de Alerta</h3>
             <?php if(!empty($mensaje_exito)) { echo "<p class='exito' style='color: white; background-color: #059669; padding: 10px; border-radius: 5px; font-weight: bold;'>$mensaje_exito</p>"; } ?>
             
             <form method="POST" action="principal.php">
@@ -129,7 +129,7 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
         </div>
 
         <div class="card" style="background: #1e1e24; margin-bottom: 20px; overflow-x: auto;">
-            <h3 style="color: #a78bfa; margin-bottom: 15px;">📊 Historial de Lecturas</h3>
+            <h3 style="color: #a78bfa; margin-bottom: 15px;">Historial de Lecturas</h3>
             <table style="width: 100%; border-collapse: collapse; text-align: center; color: white; font-size: 14px;">
                 <thead>
                     <tr style="border-bottom: 1px solid #3f3f46;">
@@ -157,7 +157,7 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
         </div>
 
         <div class="card" style="background: #1e1e24; margin-bottom: 20px;">
-            <h3 style="color: #c084fc; margin-bottom: 10px;">🕹️ Simulador de Hardware</h3>
+            <h3 style="color: #c084fc; margin-bottom: 10px;">Simulador de Hardware</h3>
             <p style="color: #a1a1aa; font-size: 14px; margin-bottom: 15px;">Usa este panel para simular los datos que enviaría la placa física.</p>
             
             <form action="api_sensores.php" target="_blank" method="GET" style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -233,9 +233,9 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
                         textoDistancia.innerText = "Distancia detectada: " + distancia + " cm";
 
                         if (distancia <= 30) { // Menor a 30cm está ocupado/pasando
-                            tituloAcceso.innerText = "ZONA OCUPADA";
+                            tituloAcceso.innerText = "ZONA";
                             tituloAcceso.style.color = "#f87171";
-                            textoEstado.innerText = "OBSTRUCCIÓN";
+                            textoEstado.innerText = "OCUPADA";
                             textoEstado.style.color = "#ffffff";
                             tarjetaAcceso.style.borderColor = "#f87171";
                             tarjetaAcceso.classList.add("card-ocupada-anim");
