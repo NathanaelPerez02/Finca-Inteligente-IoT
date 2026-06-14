@@ -10,6 +10,9 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
     $acceso_actual = (int)$_GET['acceso'];
     $modo_actual = (int)$_GET['modo'];
     
+    // Capturar el estado de la tranquera corrigiendo el guion bajo
+    $estado_tranquera = isset($_GET['estado_tranquera']) ? (int)$_GET['estado_tranquera'] : 0;
+    
     $fecha_timestamp = isset($_GET['fecha']) ? mysqli_real_escape_string($conn, $_GET['fecha']) : date("Y-m-d_H:i:s");
 
     $consulta = mysqli_query($conn, "SELECT * FROM usuarios WHERE usuario = '$usuario'");
@@ -17,23 +20,14 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
     if (mysqli_num_rows($consulta) > 0) {
         $datos = mysqli_fetch_assoc($consulta);
         
-        // Guarda TODAS las lecturas en tiempo real
-        $sql_actualizar = "UPDATE usuarios SET 
-                           humedad_actual = $humedad_actual, 
-                           agua_actual = $agua_actual,
-                           acceso_actual = $acceso_actual,
-                           modo_actual = $modo_actual 
-                           WHERE usuario = '$usuario'";
-        mysqli_query($conn, $sql_actualizar);
-
-        // Guarda en el historial
+        // Guarda en el historial de lecturas
         $sql_historial = "INSERT INTO historial_lecturas (usuario, humedad, agua, fecha) VALUES ('$usuario', $humedad_actual, $agua_actual, '$fecha_timestamp')";
         mysqli_query($conn, $sql_historial);
 
         $umbral_humedad = $datos['umbral_humedad'];
         $umbral_agua = $datos['umbral_agua'];
         $email_destino = $datos['email_alertas'];
-        $ultima_alerta = $datos['ultima_alerta']; // Capturamos la fecha del último correo
+        $ultima_alerta = $datos['ultima_alerta']; 
 
         $alertas = "";
 
@@ -50,7 +44,7 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
         if (!empty($alertas) && !empty($email_destino)) {
             
             $puede_enviar = true;
-            $minutos_espera = 60; // Espera la cantidad de minutos entre correos
+            $minutos_espera = 60; 
 
             if (!empty($ultima_alerta)) {
                 $tiempo_actual = time();
@@ -63,11 +57,9 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
             }
 
             if ($puede_enviar) {
-                // Extrae variables de Railway
                 $api_key = getenv('BREVO_API_KEY') ?: $_SERVER['BREVO_API_KEY'];
                 $correo_remitente = getenv('CORREO_REMITENTE') ?: $_SERVER['CORREO_REMITENTE'];
 
-                // Prepara el paquete de datos para la API de Brevo
                 $datos_api = [
                     "sender" => [
                         "name" => "Alertas AgroGate",
@@ -80,7 +72,6 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
                     "htmlContent" => "<h2>Sistema de Monitoreo AgroGate</h2>" . $alertas
                 ];
 
-                // Configura la petición HTTP (cURL)
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, 'https://api.brevo.com/v3/smtp/email');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -92,38 +83,41 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
                     'content-type: application/json'
                 ]);
 
-                // Ejecuta y captura respuesta
                 $respuesta = curl_exec($ch);
                 $codigo_http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 curl_close($ch);
 
                 if ($codigo_http == 201) {
-                    // Si el correo se envió, actualizamos la base de datos con la hora actual
                     $fecha_hora_actual = date('Y-m-d H:i:s');
                     mysqli_query($conn, "UPDATE usuarios SET ultima_alerta = '$fecha_hora_actual' WHERE usuario = '$usuario'");
-                    
-                    echo "<b>¡Alerta enviada por correo exitosamente!</b> ";
-                } else {
-                    echo "<b>Error de API:</b> " . htmlspecialchars($respuesta) . " ";
-                }
-            } else {
-                echo "Alerta ignorada (En periodo de silencio para evitar SPAM). ";
+                } 
             }
-
-        } else {
-            echo "Datos normales o sin alertas. ";
-        }
-        
-        // VERIFICA SI HAY ORDEN DE ABRIR
-        $abrir = (int)$datos['comando_abrir'];
-        
-        // Si había una orden, la devolvemos a 0 en la BD para que no se abra en bucle
-        if($abrir === 1) {
-            mysqli_query($conn, "UPDATE usuarios SET comando_abrir = 0 WHERE usuario = '$usuario'");
         }
 
-        // Le respondemos al NodeMCU con un JSON estricto
-        echo json_encode(["status" => "ok", "abrir" => $abrir]);
+        $sql_actualizar = "UPDATE usuarios SET 
+                            humedad_actual = $humedad_actual, 
+                            agua_actual = $agua_actual,
+                            acceso_actual = $acceso_actual,
+                            modo_actual = $modo_actual,
+                            estado_tranquera = $estado_tranquera
+                            WHERE usuario = '$usuario'";
+        mysqli_query($conn, $sql_actualizar);
+
+        // Leer comandos pendientes de la web
+        $consulta_comandos = mysqli_query($conn, "SELECT comando_abrir, comando_modo FROM usuarios WHERE usuario = '$usuario'");
+        $comandos = mysqli_fetch_assoc($consulta_comandos);
+        
+        $abrir = (int)$comandos['comando_abrir'];
+        $set_modo = (int)$comandos['comando_modo'];
+        
+        // Resetear comandos en BD para no repetirlos en bucle
+        if($abrir === 1 || $set_modo !== -1) {
+            mysqli_query($conn, "UPDATE usuarios SET comando_abrir = 0, comando_modo = -1 WHERE usuario = '$usuario'");
+        }
+
+        // Respuesta JSON estricta al NodeMCU
+        ob_clean(); 
+        echo json_encode(["status" => "ok", "abrir" => $abrir, "set_modo" => $set_modo]);
         exit();
         
     } else {

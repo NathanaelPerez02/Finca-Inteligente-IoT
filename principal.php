@@ -81,12 +81,16 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
             <div id="tarjeta_modo" class="card" style="border: 2px solid #a78bfa; width: 100%;">
                 <h3 style="color: #a78bfa; margin-bottom: 5px;">MODO DEL SISTEMA</h3>
                 <h1 id="estado_modo" style="font-size: 2.2rem; margin: 10px 0; color: white;">CARGANDO...</h1>
+                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
+                    <button onclick="ejecutarAccion('cambiar_modo', 0)" style="background: #4ade80; color: #1e1e24; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">AUTO</button>
+                    <button onclick="ejecutarAccion('cambiar_modo', 1)" style="background: #fbbf24; color: #1e1e24; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">MANUAL</button>
+                </div>
             </div>
 
             <div id="tarjeta_acceso" class="card" style="border: 2px solid #4ade80; width: 100%;">
-                <h3 id="titulo_acceso" style="color: #4ade80; margin-bottom: 5px;">ZONA</h3>
-                <h1 id="estado_acceso" style="font-size: 2.2rem; margin: 10px 0; color: white;">DESPEJADA</h1>
-                <p id="distancia_real" style="color: #a1a1aa; font-size: 14px;">Distancia detectada: <?php echo $distancia_inicial; ?> cm</p>
+                <h3 id="titulo_acceso" style="color: #4ade80; margin-bottom: 5px;">ESTADO DEL PORTÓN</h3>
+                <h1 id="estado_puerta" style="font-size: 2.2rem; margin: 10px 0; color: white;">CERRADO</h1>
+                <p id="distancia_real" style="color: #a1a1aa; font-size: 14px;">Distancia detectada: -- cm</p>
             </div>
 
             <div class="card">
@@ -209,10 +213,13 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
                         
                         let distancia = parseInt(datos.acceso_actual) || 100;
                         let modo = parseInt(datos.modo_actual) || 0; // 0 = Auto, 1 = Manual
+                        let tranquera_abierta = parseInt(datos.estado_tranquera) || 0; // 0 = Cerrada, 1 = Abierta
                         
                         // LÓGICA DEL MODO
                         let uiModo = document.getElementById('estado_modo');
                         let tarjetaModo = document.getElementById('tarjeta_modo');
+
+                        
                         
                         if(modo === 0) {
                             uiModo.innerText = "AUTOMÁTICO";
@@ -229,6 +236,7 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
                         let tituloAcceso = document.getElementById('titulo_acceso');
                         let textoEstado = document.getElementById('estado_acceso');
                         let textoDistancia = document.getElementById('distancia_real');
+                        let textoPuerta = document.getElementById('estado_puerta');
 
                         textoDistancia.innerText = "Distancia detectada: " + distancia + " cm";
 
@@ -241,12 +249,24 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
                             tarjetaAcceso.classList.add("card-ocupada-anim");
                         } 
                         else {
-                            tituloAcceso.innerText = "ACCESO LIBRE";
+                            tituloAcceso.innerText = "ZONA";
                             tituloAcceso.style.color = "#4ade80";
-                            textoEstado.innerText = "DESPEJADO";
+                            textoEstado.innerText = "DESPEJADA";
                             textoEstado.style.color = "#ffffff";
                             tarjetaAcceso.style.borderColor = "#4ade80";
                             tarjetaAcceso.classList.remove("card-ocupada-anim");
+                        }
+
+                        if (tranquera_abierta === 1) {
+                            textoPuerta.innerText = "ABIERTO";
+                            textoPuerta.style.color = "#f87171";
+                            tarjetaAcceso.style.borderColor = "#f87171";
+                            tituloAcceso.style.color = "#f87171";
+                        } else {
+                            textoPuerta.innerText = "CERRADO";
+                            textoPuerta.style.color = "#4ade80";
+                            tarjetaAcceso.style.borderColor = "#4ade80";
+                            tituloAcceso.style.color = "#4ade80";
                         }
                     }
                 })
@@ -271,6 +291,7 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
                 payload.uid = document.getElementById('uid_tarjeta').value;
                 payload.descripcion = document.getElementById('desc_tarjeta').value;
                 payload.password = document.getElementById('pass_tarjeta').value;
+                payload.modo = extraData;
                 if(!payload.uid || !payload.password) return alert("UID y Contraseña son obligatorios");
             }
 

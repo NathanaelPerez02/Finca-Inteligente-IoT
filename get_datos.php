@@ -13,7 +13,7 @@ if (!isset($_SESSION['usuario'])) {
 $usuario_actual = $_SESSION['usuario'];
 
 // Consultamos los datos, incluyendo el modo
-$consulta = mysqli_query($conn, "SELECT humedad_actual, agua_actual, acceso_actual, modo_actual FROM usuarios WHERE usuario = '$usuario_actual'");
+$consulta = mysqli_query($conn, "SELECT humedad_actual, agua_actual, acceso_actual, modo_actual, estado_tranquera FROM usuarios WHERE usuario = '$usuario_actual'");
 
 // Se los enviamos al JavaScript
 if ($datos = mysqli_fetch_assoc($consulta)) {
@@ -22,7 +22,8 @@ if ($datos = mysqli_fetch_assoc($consulta)) {
         "humedad_actual" => (int)$datos['humedad_actual'],
         "agua_actual" => (int)$datos['agua_actual'],
         "acceso_actual" => (int)$datos['acceso_actual'],
-        "modo_actual" => (int)$datos['modo_actual']
+        "modo_actual" => (int)$datos['modo_actual'],
+        "estado_tranquera" => (int)$datos['estado_tranquera']
     ]);
 } else {
     echo json_encode(["error" => "Usuario no encontrado"]);

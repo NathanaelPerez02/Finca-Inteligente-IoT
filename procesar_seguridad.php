@@ -11,24 +11,26 @@ if (!isset($_SESSION['usuario'])) {
 // Recibe los datos del fetch (JavaScript)
 $datos = json_decode(file_get_contents('php://input'), true);
 $usuario = $_SESSION['usuario'];
-$password_ingresada = mysqli_real_escape_string($conn, $datos['password']);
 $accion = $datos['accion'];
-
-// VERIFICA LA CONTRASEÑA EN LA BASE DE DATOS
-$consulta = mysqli_query($conn, "SELECT contrasena FROM usuarios WHERE usuario = '$usuario'");
-$fila = mysqli_fetch_assoc($consulta);
-
-
-if ($password_ingresada !== $fila['contrasena']) {
-    echo json_encode(["exito" => false, "mensaje" => "Contraseña incorrecta"]);
-    exit();
-}
 
 // EJECUTA LA ACCIÓN SOLICITADA
 if ($accion === "abrir_porton") {
+    $password_ingresada = mysqli_real_escape_string($conn, $datos['password']);
+    $consulta = mysqli_query($conn, "SELECT contrasena FROM usuarios WHERE usuario = '$usuario'");
+    $fila = mysqli_fetch_assoc($consulta);
+
+    if ($password_ingresada !== $fila['contrasena']) {
+        echo json_encode(["exito" => false, "mensaje" => "Contraseña incorrecta"]);
+        exit();
+    }
     mysqli_query($conn, "UPDATE usuarios SET comando_abrir = 1 WHERE usuario = '$usuario'");
-    echo json_encode(["exito" => true, "mensaje" => "¡Orden de apertura enviada al portón!"]);
+    echo json_encode(["exito" => true, "mensaje" => "¡Orden de apertura enviada!"]);
 } 
+else if ($accion === "cambiar_modo") {
+    $nuevo_modo = (int)$datos['modo'];
+    mysqli_query($conn, "UPDATE usuarios SET comando_modo = $nuevo_modo WHERE usuario = '$usuario'");
+    echo json_encode(["exito" => true, "mensaje" => "Cambiando modo..."]);
+}
 else if ($accion === "agregar_tarjeta") {
     $uid = mysqli_real_escape_string($conn, strtoupper(trim($datos['uid'])));
     $descripcion = mysqli_real_escape_string($conn, $datos['descripcion']);
