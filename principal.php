@@ -63,6 +63,11 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
         
         <div style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
             
+            <div id="tarjeta_modo" class="card" style="border: 2px solid #a78bfa; width: 100%;">
+                <h3 style="color: #a78bfa; margin-bottom: 5px;">⚙️ MODO DEL SISTEMA</h3>
+                <h1 id="estado_modo" style="font-size: 2.2rem; margin: 10px 0; color: white;">CARGANDO...</h1>
+            </div>
+
             <div id="tarjeta_acceso" class="card" style="border: 2px solid #4ade80; width: 100%;">
                 <h3 id="titulo_acceso" style="color: #4ade80; margin-bottom: 5px;">🟢 ACCESO LIBRE</h3>
                 <h1 id="estado_acceso" style="font-size: 2.2rem; margin: 10px 0; color: white;">DESPEJADO</h1>
@@ -74,15 +79,13 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
                 <h1 id="valor_agua" style="font-size: 3.5rem; margin: 10px 0; color: white;">
                     <?php echo htmlspecialchars($datos_user['agua_actual'] ?? '0'); ?>%
                 </h1>
-                <p style="color: #a1a1aa; font-size: 14px;">Umbral de alerta: <?php echo htmlspecialchars($datos_user['umbral_agua'] ?? '30'); ?>%</p>
             </div>
 
             <div class="card">
-                <h3 style="color: #fbbf24; margin-bottom: 5px;">🪴 Humedad de Suelo</h3>
+                <h3 style="color: #fbbf24; margin-bottom: 5px;">🪴 Humedad Suelo</h3>
                 <h1 id="valor_humedad" style="font-size: 3.5rem; margin: 10px 0; color: white;">
                     <?php echo htmlspecialchars($datos_user['humedad_actual'] ?? '0'); ?>%
                 </h1>
-                <p style="color: #a1a1aa; font-size: 14px;">Umbral de alerta: <?php echo htmlspecialchars($datos_user['umbral_humedad'] ?? '30'); ?>%</p>
             </div>
         </div>
 
@@ -161,51 +164,52 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
                         document.getElementById('valor_humedad').innerText = datos.humedad_actual + '%';
                         
                         let distancia = parseInt(datos.acceso_actual) || 100;
+                        let modo = parseInt(datos.modo_actual) || 0; // 0 = Auto, 1 = Manual
                         
-                        let tarjeta = document.getElementById('tarjeta_acceso');
+                        // LÓGICA DEL MODO
+                        let uiModo = document.getElementById('estado_modo');
+                        let tarjetaModo = document.getElementById('tarjeta_modo');
+                        
+                        if(modo === 0) {
+                            uiModo.innerText = "AUTOMÁTICO";
+                            uiModo.style.color = "#4ade80";
+                            tarjetaModo.style.borderColor = "#4ade80";
+                        } else {
+                            uiModo.innerText = "MANUAL";
+                            uiModo.style.color = "#fbbf24";
+                            tarjetaModo.style.borderColor = "#fbbf24";
+                        }
+
+                        // LÓGICA DE ACCESO Y DISTANCIA
+                        let tarjetaAcceso = document.getElementById('tarjeta_acceso');
                         let tituloAcceso = document.getElementById('titulo_acceso');
                         let textoEstado = document.getElementById('estado_acceso');
                         let textoDistancia = document.getElementById('distancia_real');
 
                         textoDistancia.innerText = "Distancia detectada: " + distancia + " cm";
 
-                        if (distancia <= 10) {
-                            tituloAcceso.innerText = "🚗 ZONA OCUPADA";
+                        if (distancia <= 30) { // Menor a 30cm está ocupado/pasando
+                            tituloAcceso.innerText = "ZONA OCUPADA";
                             tituloAcceso.style.color = "#f87171";
-                            textoEstado.innerText = "ESPERA / RFID";
+                            textoEstado.innerText = "OBSTRUCCIÓN";
                             textoEstado.style.color = "#ffffff";
-                            tarjeta.style.borderColor = "#f87171";
-                            tarjeta.classList.add("card-ocupada-anim");
-                        } 
-                        else if (distancia > 10 && distancia <= 15) {
-                            tituloAcceso.innerText = "⚠️ PRECAUCIÓN";
-                            tituloAcceso.style.color = "#fbbf24";
-                            textoEstado.innerText = "ACERCÁNDOSE";
-                            textoEstado.style.color = "#ffffff";
-                            tarjeta.style.borderColor = "#fbbf24";
-                            tarjeta.classList.remove("card-ocupada-anim");
+                            tarjetaAcceso.style.borderColor = "#f87171";
+                            tarjetaAcceso.classList.add("card-ocupada-anim");
                         } 
                         else {
-                            tituloAcceso.innerText = "🟢 ACCESO LIBRE";
+                            tituloAcceso.innerText = "ACCESO LIBRE";
                             tituloAcceso.style.color = "#4ade80";
                             textoEstado.innerText = "DESPEJADO";
                             textoEstado.style.color = "#ffffff";
-                            tarjeta.style.borderColor = "#4ade80";
-                            tarjeta.classList.remove("card-ocupada-anim");
+                            tarjetaAcceso.style.borderColor = "#4ade80";
+                            tarjetaAcceso.classList.remove("card-ocupada-anim");
                         }
-                        // Recargar la página silenciosamente cada 30 segundos para actualizar la tabla del historial
-                        // sin interrumpir la experiencia de los grandes números en tiempo real
                     }
                 })
                 .catch(error => console.log('Error actualizando sensores:', error));
         }
 
-        setInterval(actualizarSensores, 3000);
-        
-        // Refresca la tabla del historial cada 1 minuto (60000ms)
-        setInterval(() => {
-            location.reload();
-        }, 60000);
+        setInterval(actualizarSensores, 2000); 
     </script>
 </body>
 </html>

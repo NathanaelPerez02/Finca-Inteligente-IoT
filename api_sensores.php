@@ -2,11 +2,13 @@
 include("conexion.php");
 
 // Se reciben los datos por URL (GET)
-if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua'])) {
+if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) && isset($_GET['acceso']) && isset($_GET['modo'])) {
     
     $usuario = mysqli_real_escape_string($conn, $_GET['usuario']);
     $humedad_actual = (int)$_GET['humedad'];
     $agua_actual = (int)$_GET['agua'];
+    $acceso_actual = (int)$_GET['acceso'];
+    $modo_actual = (int)$_GET['modo'];
     
     $fecha_timestamp = isset($_GET['fecha']) ? mysqli_real_escape_string($conn, $_GET['fecha']) : date("Y-m-d_H:i:s");
 
@@ -15,11 +17,16 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua'])) 
     if (mysqli_num_rows($consulta) > 0) {
         $datos = mysqli_fetch_assoc($consulta);
         
-        // Guardar las lecturas en tiempo real
-        $sql_actualizar = "UPDATE usuarios SET humedad_actual = $humedad_actual, agua_actual = $agua_actual WHERE usuario = '$usuario'";
+        // Guardar TODAS las lecturas en tiempo real
+        $sql_actualizar = "UPDATE usuarios SET 
+                           humedad_actual = $humedad_actual, 
+                           agua_actual = $agua_actual,
+                           acceso_actual = $acceso_actual,
+                           modo_actual = $modo_actual 
+                           WHERE usuario = '$usuario'";
         mysqli_query($conn, $sql_actualizar);
 
-        // Guardar en el historial
+        // Guardar en el historial (aquí solo nos importa la humedad y el agua para el gráfico/tabla)
         $sql_historial = "INSERT INTO historial_lecturas (usuario, humedad, agua, fecha) VALUES ('$usuario', $humedad_actual, $agua_actual, '$fecha_timestamp')";
         mysqli_query($conn, $sql_historial);
 
@@ -32,17 +39,16 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua'])) 
 
         // Verificamos si los sensores cayeron por debajo del límite
         if ($humedad_actual < $umbral_humedad) {
-            $alertas .= "<h3>⚠️ Alerta de Suelo</h3><p>La humedad está en <b>$humedad_actual%</b>. ¡Necesita riego!</p>";
+            $alertas .= "<h3>Alerta de Suelo</h3><p>La humedad está en <b>$humedad_actual%</b>. ¡Necesita riego!</p>";
         }
 
         if ($agua_actual < $umbral_agua) {
-            $alertas .= "<h3>💧 Alerta de Piscina</h3><p>El nivel bajó a <b>$agua_actual%</b>. ¡Revisar reservorio!</p>";
+            $alertas .= "<h3>Alerta de Piscina</h3><p>El nivel bajó a <b>$agua_actual%</b>. ¡Revisar reservorio!</p>";
         }
 
-        // Si hay alertas y hay correo destino configurado
+        // LÓGICA DE ENVÍO DE CORREOS
         if (!empty($alertas) && !empty($email_destino)) {
             
-            // LÓGICA DE ANTISPAM
             $puede_enviar = true;
             $minutos_espera = 60; // Esperar la cantidad de minutos entre correos
 
@@ -71,7 +77,7 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua'])) 
                         ["email" => $email_destino]
                     ],
                     "subject" => "Alerta Critica - AgroGate",
-                    "htmlContent" => "<h2>🚨 Sistema de Monitoreo AgroGate</h2>" . $alertas
+                    "htmlContent" => "<h2>Sistema de Monitoreo AgroGate</h2>" . $alertas
                 ];
 
                 // Configurar la petición HTTP (cURL)
