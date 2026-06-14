@@ -17,7 +17,7 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
     if (mysqli_num_rows($consulta) > 0) {
         $datos = mysqli_fetch_assoc($consulta);
         
-        // Guardar TODAS las lecturas en tiempo real
+        // Guarda TODAS las lecturas en tiempo real
         $sql_actualizar = "UPDATE usuarios SET 
                            humedad_actual = $humedad_actual, 
                            agua_actual = $agua_actual,
@@ -26,7 +26,7 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
                            WHERE usuario = '$usuario'";
         mysqli_query($conn, $sql_actualizar);
 
-        // Guardar en el historial (aquí solo nos importa la humedad y el agua para el gráfico/tabla)
+        // Guarda en el historial
         $sql_historial = "INSERT INTO historial_lecturas (usuario, humedad, agua, fecha) VALUES ('$usuario', $humedad_actual, $agua_actual, '$fecha_timestamp')";
         mysqli_query($conn, $sql_historial);
 
@@ -50,7 +50,7 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
         if (!empty($alertas) && !empty($email_destino)) {
             
             $puede_enviar = true;
-            $minutos_espera = 60; // Esperar la cantidad de minutos entre correos
+            $minutos_espera = 60; // Espera la cantidad de minutos entre correos
 
             if (!empty($ultima_alerta)) {
                 $tiempo_actual = time();
@@ -63,11 +63,11 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
             }
 
             if ($puede_enviar) {
-                // Extraer variables de Railway
+                // Extrae variables de Railway
                 $api_key = getenv('BREVO_API_KEY') ?: $_SERVER['BREVO_API_KEY'];
                 $correo_remitente = getenv('CORREO_REMITENTE') ?: $_SERVER['CORREO_REMITENTE'];
 
-                // Preparar el paquete de datos para la API de Brevo
+                // Prepara el paquete de datos para la API de Brevo
                 $datos_api = [
                     "sender" => [
                         "name" => "Alertas AgroGate",
@@ -80,7 +80,7 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
                     "htmlContent" => "<h2>Sistema de Monitoreo AgroGate</h2>" . $alertas
                 ];
 
-                // Configurar la petición HTTP (cURL)
+                // Configura la petición HTTP (cURL)
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, 'https://api.brevo.com/v3/smtp/email');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -92,7 +92,7 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
                     'content-type: application/json'
                 ]);
 
-                // Ejecutar y capturar respuesta
+                // Ejecuta y captura respuesta
                 $respuesta = curl_exec($ch);
                 $codigo_http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 curl_close($ch);
@@ -114,7 +114,17 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
             echo "Datos normales o sin alertas. ";
         }
         
-        echo "Datos guardados en BD.";
+        // VERIFICA SI HAY ORDEN DE ABRIR
+        $abrir = (int)$datos['comando_abrir'];
+        
+        // Si había una orden, la devolvemos a 0 en la BD para que no se abra en bucle
+        if($abrir === 1) {
+            mysqli_query($conn, "UPDATE usuarios SET comando_abrir = 0 WHERE usuario = '$usuario'");
+        }
+
+        // Le respondemos al NodeMCU con un JSON estricto
+        echo json_encode(["status" => "ok", "abrir" => $abrir]);
+        exit();
         
     } else {
         echo "Usuario no encontrado.";

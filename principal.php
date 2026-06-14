@@ -54,6 +54,21 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
         .card-ocupada-anim {
             animation: pulso-rojo 1.5s infinite;
         }
+        /* Estilos para los Modales */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); z-index: 1000; align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background: #1e1e24; padding: 25px; border-radius: 10px; border: 1px solid #3f3f46;
+            width: 90%; max-width: 400px; text-align: left; color: white;
+        }
+        .modal-input {
+            width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #3f3f46;
+            background: #27272a; color: white; box-sizing: border-box;
+        }
+        .btn-cerrar { background: transparent; border: none; color: #a1a1aa; float: right; font-size: 1.5rem; cursor: pointer; }
+        .btn-accion { width: 100%; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px;}
     </style>
 </head>
 <body>
@@ -87,6 +102,15 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
                     <?php echo htmlspecialchars($datos_user['humedad_actual'] ?? '0'); ?>%
                 </h1>
             </div>
+        </div>
+
+        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+            <button onclick="abrirModal('modalAbrir')" style="flex: 1; padding: 15px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                🔓 Apertura Remota
+            </button>
+            <button onclick="abrirModal('modalTarjeta')" style="flex: 1; padding: 15px; background: #8b5cf6; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                💳 Registrar Nueva Tarjeta
+            </button>
         </div>
 
         <div class="card" style="background: #1e1e24; margin: 20px 0; max-width: 100%; text-align: left;">
@@ -152,7 +176,27 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
         </div>
     </div>
 
-    
+    <div id="modalAbrir" class="modal-overlay">
+        <div class="modal-content">
+            <button class="btn-cerrar" onclick="cerrarModal('modalAbrir')">&times;</button>
+            <h3 style="color: #3b82f6; margin-top: 0;">Confirmar Apertura</h3>
+            <p style="color: #a1a1aa; font-size: 14px;">Ingrese su contraseña maestra para abrir la tranquera remotamente.</p>
+            <input type="password" id="pass_abrir" class="modal-input" placeholder="Contraseña...">
+            <button class="btn-accion" style="background: #3b82f6; color: white;" onclick="ejecutarAccion('abrir_porton')">ABRIR PORTÓN</button>
+        </div>
+    </div>
+
+    <div id="modalTarjeta" class="modal-overlay">
+        <div class="modal-content">
+            <button class="btn-cerrar" onclick="cerrarModal('modalTarjeta')">&times;</button>
+            <h3 style="color: #8b5cf6; margin-top: 0;">Registrar Llave RFID</h3>
+            <input type="text" id="uid_tarjeta" class="modal-input" placeholder="UID (Ej: 3A F4 12 89)">
+            <input type="text" id="desc_tarjeta" class="modal-input" placeholder="Descripción (Ej: Llavero Papá)">
+            <input type="password" id="pass_tarjeta" class="modal-input" placeholder="Contraseña maestra...">
+            <button class="btn-accion" style="background: #8b5cf6; color: white;" onclick="ejecutarAccion('agregar_tarjeta')">GUARDAR TARJETA</button>
+        </div>
+    </div>
+
     <script src="js/main.js"></script>
     <script>
         function actualizarSensores() {
@@ -211,5 +255,45 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
 
         setInterval(actualizarSensores, 2000); 
     </script>
+
+    <script>
+        function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function ejecutarAccion(tipoAccion) {
+            let payload = { accion: tipoAccion };
+
+            if (tipoAccion === 'abrir_porton') {
+                payload.password = document.getElementById('pass_abrir').value;
+                if(!payload.password) return alert("Ingrese la contraseña");
+            } 
+            else if (tipoAccion === 'agregar_tarjeta') {
+                payload.uid = document.getElementById('uid_tarjeta').value;
+                payload.descripcion = document.getElementById('desc_tarjeta').value;
+                payload.password = document.getElementById('pass_tarjeta').value;
+                if(!payload.uid || !payload.password) return alert("UID y Contraseña son obligatorios");
+            }
+
+            fetch('procesar_seguridad.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.mensaje);
+                if(data.exito) {
+                    cerrarModal('modalAbrir');
+                    cerrarModal('modalTarjeta');
+                    // Limpiar campos
+                    document.getElementById('pass_abrir').value = '';
+                    document.getElementById('pass_tarjeta').value = '';
+                    document.getElementById('uid_tarjeta').value = '';
+                    document.getElementById('desc_tarjeta').value = '';
+                }
+            });
+        }
+    </script>
+
 </body>
 </html>
