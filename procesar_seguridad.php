@@ -30,7 +30,8 @@ if ($accion === "abrir_porton") {
 
     mysqli_query($conn, "UPDATE usuarios SET 
                             comando_abrir    = 1,
-                            estado_tranquera = 1
+                            estado_tranquera = 1,
+                            hay_comando      = 1
                         WHERE usuario = '$usuario'");
     echo json_encode(["exito" => true, "mensaje" => "¡Orden de apertura enviada!"]);
 }
@@ -46,7 +47,8 @@ else if ($accion === "cerrar_porton") {
 
     mysqli_query($conn, "UPDATE usuarios SET 
                             comando_cerrar   = 1,
-                            estado_tranquera = 0
+                            estado_tranquera = 0,
+                            hay_comando      = 1
                          WHERE usuario = '$usuario'");
     echo json_encode(["exito" => true, "mensaje" => "¡Orden de cierre enviada!"]);
 }
@@ -56,7 +58,8 @@ else if ($accion === "cambiar_modo") {
     // Y actualiza modo_actual inmediatamente para que la web lo vea al instante
     mysqli_query($conn, "UPDATE usuarios SET 
                             comando_modo = $nuevo_modo,
-                            modo_actual  = $nuevo_modo
+                            modo_actual  = $nuevo_modo,
+                            hay_comando  = 1
                          WHERE usuario = '$usuario'");
     echo json_encode(["exito" => true, "mensaje" => "Cambiando modo..."]);
 }

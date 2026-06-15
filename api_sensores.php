@@ -107,7 +107,7 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
 
         // Resetear comandos
         if ($abrir === 1 || $cerrar === 1 || $set_modo !== -1) {
-            mysqli_query($conn, "UPDATE usuarios SET comando_abrir = 0, comando_cerrar = 0, comando_modo = -1 WHERE usuario = '$usuario'");
+            mysqli_query($conn, "UPDATE usuarios SET comando_abrir = 0, comando_cerrar = 0, comando_modo = -1, hay_comando = 0 WHERE usuario = '$usuario'");
         }
 
         ob_clean();
