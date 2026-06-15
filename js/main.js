@@ -96,12 +96,12 @@ function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
                     textoDistancia.innerText = "Distancia detectada: " + distancia + " cm";
         
                     if (distancia <= 30) {
-                        tituloAcceso.innerText = "ZONA";
+                        tituloAcceso.innerText = "ESTADO DE LA TRANQUERA";
                         tituloAcceso.style.color = "#f87171";
                         tarjetaAcceso.style.borderColor = "#f87171";
                         tarjetaAcceso.classList.add("card-ocupada-anim");
                     } else {
-                        tituloAcceso.innerText = "ZONA";
+                        tituloAcceso.innerText = "ESTADO DE LA TRANQUERA";
                         tituloAcceso.style.color = "#4ade80";
                         tarjetaAcceso.style.borderColor = "#4ade80";
                         tarjetaAcceso.classList.remove("card-ocupada-anim");

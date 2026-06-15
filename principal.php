@@ -88,8 +88,8 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
             </div>
 
             <div id="tarjeta_acceso" class="card" style="border: 2px solid #4ade80; width: 100%;">
-                <h3 id="titulo_acceso" style="color: #4ade80; margin-bottom: 5px;">ESTADO DEL PORTÓN</h3>
-                <h1 id="estado_puerta" style="font-size: 2.2rem; margin: 10px 0; color: white;">CERRADO</h1>
+                <h3 id="titulo_acceso" style="color: #4ade80; margin-bottom: 5px;">ESTADO DE LA TRANQUERA</h3>
+                <h1 id="estado_puerta" style="font-size: 2.2rem; margin: 10px 0; color: white;">CERRADA</h1>
                 <p id="distancia_real" style="color: #a1a1aa; font-size: 14px;">Distancia detectada: -- cm</p>
             </div>
 
