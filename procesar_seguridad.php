@@ -28,7 +28,10 @@ if ($accion === "abrir_porton") {
         exit();
     }
 
-    mysqli_query($conn, "UPDATE usuarios SET comando_abrir = 1 WHERE usuario = '$usuario'");
+    mysqli_query($conn, "UPDATE usuarios SET 
+                            comando_abrir    = 1,
+                            estado_tranquera = 1
+                        WHERE usuario = '$usuario'");
     echo json_encode(["exito" => true, "mensaje" => "¡Orden de apertura enviada!"]);
 }
 else if ($accion === "cerrar_porton") {
@@ -41,12 +44,20 @@ else if ($accion === "cerrar_porton") {
         exit();
     }
 
-    mysqli_query($conn, "UPDATE usuarios SET comando_cerrar = 1 WHERE usuario = '$usuario'");
+    mysqli_query($conn, "UPDATE usuarios SET 
+                            comando_cerrar   = 1,
+                            estado_tranquera = 0
+                         WHERE usuario = '$usuario'");
     echo json_encode(["exito" => true, "mensaje" => "¡Orden de cierre enviada!"]);
 }
 else if ($accion === "cambiar_modo") {
     $nuevo_modo = (int)$datos['modo'];
-    mysqli_query($conn, "UPDATE usuarios SET comando_modo = $nuevo_modo WHERE usuario = '$usuario'");
+    // Guarda el comando para el NodeMCU
+    // Y actualiza modo_actual inmediatamente para que la web lo vea al instante
+    mysqli_query($conn, "UPDATE usuarios SET 
+                            comando_modo = $nuevo_modo,
+                            modo_actual  = $nuevo_modo
+                         WHERE usuario = '$usuario'");
     echo json_encode(["exito" => true, "mensaje" => "Cambiando modo..."]);
 }
 else if ($accion === "agregar_tarjeta") {
