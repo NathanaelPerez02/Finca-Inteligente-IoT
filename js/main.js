@@ -123,4 +123,4 @@ function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
             .catch(error => console.log('Error actualizando sensores:', error));
         }
         
-        setInterval(actualizarSensores, 2000);
+        setInterval(actualizarSensores, 500);
