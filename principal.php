@@ -108,14 +108,16 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
             </div>
         </div>
 
-        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-            <button onclick="abrirModal('modalAbrir')" style="flex: 1; padding: 15px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                Apertura Remota
-            </button>
-            <button onclick="abrirModal('modalTarjeta')" style="flex: 1; padding: 15px; background: #8b5cf6; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                Registrar Nueva Tarjeta
-            </button>
-        </div>
+        <button id="btn_abrir" onclick="abrirModal('modalAbrir')"
+            style="flex: 1; padding: 15px; background: #3b82f6; color: white; border: none;
+            border-radius: 8px; font-weight: bold; cursor: pointer; display: none;">
+            Abrir Portón
+        </button>
+        <button id="btn_cerrar" onclick="ejecutarAccion('cerrar_porton')"
+            style="flex: 1; padding: 15px; background: #f87171; color: white; border: none;
+            border-radius: 8px; font-weight: bold; cursor: pointer; display: none;">
+            Cerrar Portón
+        </button>
 
         <div class="card" style="background: #1e1e24; margin: 20px 0; max-width: 100%; text-align: left;">
             <h3 style="color: #4ade80; margin-bottom: 15px;">Configurar Niveles de Alerta</h3>
