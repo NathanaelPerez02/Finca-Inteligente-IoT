@@ -89,25 +89,35 @@ if (isset($_GET['usuario']) && isset($_GET['humedad']) && isset($_GET['agua']) &
             }
         }
 
-        // Actualizar valores en tiempo real
-        mysqli_query($conn, "UPDATE usuarios SET
-                                humedad_actual   = $humedad_actual,
-                                agua_actual      = $agua_actual,
-                                acceso_actual    = $acceso_actual,
-                                modo_actual      = $modo_actual,
-                                estado_tranquera = $estado_tranquera
-                             WHERE usuario = '$usuario'");
-
         // Leer comandos pendientes
-        $consulta_comandos = mysqli_query($conn, "SELECT comando_abrir, comando_cerrar, comando_modo FROM usuarios WHERE usuario = '$usuario'");
+        $consulta_comandos = mysqli_query($conn, "SELECT comando_abrir, comando_cerrar, comando_modo, hay_comando FROM usuarios WHERE usuario = '$usuario'");
         $comandos  = mysqli_fetch_assoc($consulta_comandos);
         $abrir     = (int)$comandos['comando_abrir'];
         $cerrar    = (int)$comandos['comando_cerrar'];
         $set_modo  = (int)$comandos['comando_modo'];
+        $hay_cmd   = (int)$comandos['hay_comando'];
 
         // Resetear comandos
         if ($abrir === 1 || $cerrar === 1 || $set_modo !== -1) {
             mysqli_query($conn, "UPDATE usuarios SET comando_abrir = 0, comando_cerrar = 0, comando_modo = -1, hay_comando = 0 WHERE usuario = '$usuario'");
+        }
+
+        // Si hay comando pendiente, no sobreescribir modo_actual ni estado_tranquera
+        if ($hay_cmd === 0) {
+            mysqli_query($conn, "UPDATE usuarios SET
+                                    humedad_actual   = $humedad_actual,
+                                    agua_actual      = $agua_actual,
+                                    acceso_actual    = $acceso_actual,
+                                    modo_actual      = $modo_actual,
+                                    estado_tranquera = $estado_tranquera
+                                WHERE usuario = '$usuario'");
+        } else {
+            // Solo actualiza humedad, agua y distancia — no toca modo ni tranquera
+            mysqli_query($conn, "UPDATE usuarios SET
+                                    humedad_actual = $humedad_actual,
+                                    agua_actual    = $agua_actual,
+                                    acceso_actual  = $acceso_actual
+                                WHERE usuario = '$usuario'");
         }
 
         ob_clean();
