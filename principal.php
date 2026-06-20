@@ -35,15 +35,7 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
     <title>Panel Principal - Finca Inteligente</title>
     <link rel="stylesheet" href="css/estilos.css">
     <style>
-        .card {
-            background: #1e1e24; 
-            flex: 1; 
-            text-align: center; 
-            min-width: 200px; 
-            border-radius: 8px;
-            padding: 15px;
-            transition: all 0.3s ease;
-        }
+        /* Mantenemos tu animación de alerta roja aquí o pásala a estilos.css */
         @keyframes pulso-rojo {
             0% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.5); border-color: rgba(248, 113, 113, 0.6); }
             70% { box-shadow: 0 0 0 10px rgba(248, 113, 113, 0); border-color: rgba(248, 113, 113, 1); }
@@ -52,76 +44,96 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
         .card-ocupada-anim {
             animation: pulso-rojo 1.5s infinite;
         }
+        /* Transición suave para cuando cambia el color del borde por JS */
+        #tarjeta_acceso {
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 <body>
-    <div class="welcome-container" style="max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1>🌱 Panel de Control</h1>
-        <p>Bienvenido al sistema de monitoreo, <strong><?php echo htmlspecialchars($_SESSION['usuario']); ?></strong>.</p>
+    <main class="dashboard-container">
         
-        <div style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+        <header class="dashboard-header">
+            <h1>🌱 Panel de Control</h1>
+            <p>Bienvenido al sistema de monitoreo, <strong><?php echo htmlspecialchars($_SESSION['usuario']); ?></strong>.</p>
+        </header>
+
+        <section class="cards-grid">
             
-            <div id="tarjeta_acceso" class="card" style="border: 2px solid #4ade80; width: 100%;">
-                <h3 id="titulo_acceso" style="color: #4ade80; margin-bottom: 5px;">🟢 ACCESO LIBRE</h3>
-                <h1 id="estado_acceso" style="font-size: 2.2rem; margin: 10px 0; color: white;">DESPEJADO</h1>
-                <p id="distancia_real" style="color: #a1a1aa; font-size: 14px;">Distancia detectada: <?php echo $distancia_inicial; ?> cm</p>
+            <div id="tarjeta_acceso" class="dash-card border-green">
+                <h3 id="titulo_acceso" class="text-green">🟢 ACCESO LIBRE</h3>
+                <h2 id="estado_acceso">DESPEJADO</h2>
+                <p id="distancia_real">Distancia detectada: <?php echo $distancia_inicial; ?> cm</p>
             </div>
 
-            <div class="card">
-                <h3 style="color: #38bdf8; margin-bottom: 5px;">💧 Nivel de Piscina</h3>
-                <h1 id="valor_agua" style="font-size: 3.5rem; margin: 10px 0; color: white;">
-                    <?php echo htmlspecialchars($datos_user['agua_actual'] ?? '0'); ?>%
-                </h1>
-                <p style="color: #a1a1aa; font-size: 14px;">Umbral de alerta: <?php echo htmlspecialchars($datos_user['umbral_agua'] ?? '30'); ?>%</p>
+            <div class="dash-card">
+                <h3 class="text-blue">💧 Nivel de Piscina</h3>
+                <h2 id="valor_agua" class="data-value"><?php echo htmlspecialchars($datos_user['agua_actual'] ?? '0'); ?>%</h2>
+                <p>Umbral de alerta: <?php echo htmlspecialchars($datos_user['umbral_agua'] ?? '30'); ?>%</p>
             </div>
 
-            <div class="card">
-                <h3 style="color: #fbbf24; margin-bottom: 5px;">🪴 Humedad de Suelo</h3>
-                <h1 id="valor_humedad" style="font-size: 3.5rem; margin: 10px 0; color: white;">
-                    <?php echo htmlspecialchars($datos_user['humedad_actual'] ?? '0'); ?>%
-                </h1>
-                <p style="color: #a1a1aa; font-size: 14px;">Umbral de alerta: <?php echo htmlspecialchars($datos_user['umbral_humedad'] ?? '30'); ?>%</p>
+            <div class="dash-card">
+                <h3 class="text-yellow">🪴 Humedad de Suelo</h3>
+                <h2 id="valor_humedad" class="data-value"><?php echo htmlspecialchars($datos_user['humedad_actual'] ?? '0'); ?>%</h2>
+                <p>Umbral de alerta: <?php echo htmlspecialchars($datos_user['umbral_humedad'] ?? '30'); ?>%</p>
             </div>
-        </div>
 
-        <div class="card" style="background: #1e1e24; margin: 20px 0; max-width: 100%; text-align: left;">
-            <h3 style="color: #4ade80; margin-bottom: 15px;">⚙️ Configurar Niveles de Alerta</h3>
-            <?php if(!empty($mensaje_exito)) { echo "<p class='exito' style='color: white; background-color: #059669; padding: 10px; border-radius: 5px; font-weight: bold;'>$mensaje_exito</p>"; } ?>
+            <div class="dash-card">
+                 <h3>MODO DEL SISTEMA</h3>
+                 <h2 class="text-green">AUTOMÁTICO</h2>
+                 <div class="toggle-buttons">
+                     <button class="btn-active">AUTO</button>
+                     <button class="btn-inactive">MANUAL</button>
+                 </div>
+            </div>
+
+        </section>
+
+        <section class="control-section">
             
-            <form method="POST" action="principal.php">
-                <label style="color: #a1a1aa; font-size: 14px;">Umbral mínimo Humedad Suelo (%):</label>
-                <input type="number" name="umbral_humedad" value="<?php echo htmlspecialchars($datos_user['umbral_humedad'] ?? '30'); ?>" required>
+            <div class="dash-card card-form">
+                <h3 class="text-green">⚙️ Configurar Niveles de Alerta</h3>
+                <?php if(!empty($mensaje_exito)) { echo "<p class='exito'>$mensaje_exito</p>"; } ?>
                 
-                <label style="color: #a1a1aa; font-size: 14px;">Umbral mínimo Nivel Piscina (%):</label>
-                <input type="number" name="umbral_agua" value="<?php echo htmlspecialchars($datos_user['umbral_agua'] ?? '30'); ?>" required>
-                
-                <button type="submit" name="actualizar_umbrales" style="margin-top: 10px;">Guardar Configuración</button>
-            </form>
-        </div>
+                <form method="POST" action="principal.php" class="form-vertical">
+                    <div class="input-group">
+                        <label>Umbral mínimo Humedad Suelo (%):</label>
+                        <input type="number" name="umbral_humedad" value="<?php echo htmlspecialchars($datos_user['umbral_humedad'] ?? '30'); ?>" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Umbral mínimo Nivel Piscina (%):</label>
+                        <input type="number" name="umbral_agua" value="<?php echo htmlspecialchars($datos_user['umbral_agua'] ?? '30'); ?>" required>
+                    </div>
+                    
+                    <button type="submit" name="actualizar_umbrales" class="btn">Guardar Configuración</button>
+                </form>
+            </div>
 
-        <div class="card" style="background: #1e1e24; margin-bottom: 20px;">
-            <h3 style="color: #c084fc; margin-bottom: 10px;">🕹️ Simulador de Hardware</h3>
-            <p style="color: #a1a1aa; font-size: 14px; margin-bottom: 15px;">Usa este panel para simular los datos que enviaría la placa física.</p>
-            
-            <form action="api_sensores.php" target="_blank" method="GET" style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <input type="hidden" name="usuario" value="<?php echo htmlspecialchars($datos_user['usuario'] ?? 'oldtote'); ?>">
+            <div class="dash-card card-form">
+                <h3 style="color: #c084fc; margin-bottom: 10px;">🕹️ Simulador de Hardware</h3>
+                <p>Usa este panel para simular los datos que enviaría la placa física.</p>
                 
-                <input type="number" name="agua" placeholder="Nivel Piscina (%)" required style="flex: 1; min-width: 120px; padding: 10px; border-radius: 5px; border: 1px solid #3f3f46; background: #27272a; color: white;">
-                
-                <input type="number" name="humedad" placeholder="Humedad Suelo (%)" required style="flex: 1; min-width: 120px; padding: 10px; border-radius: 5px; border: 1px solid #3f3f46; background: #27272a; color: white;">
-                
-                <button type="submit" style="background: #c084fc; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Simular Envío</button>
-            </form>
-        </div>
+                <form action="api_sensores.php" target="_blank" method="GET" class="form-horizontal">
+                    <input type="hidden" name="usuario" value="<?php echo htmlspecialchars($datos_user['usuario'] ?? 'oldtote'); ?>">
+                    <input type="number" name="agua" placeholder="Nivel Piscina (%)" required>
+                    <input type="number" name="humedad" placeholder="Humedad Suelo (%)" required>
+                    <button type="submit" style="background: #c084fc; color: white;">Simular Envío</button>
+                </form>
+            </div>
 
-        <div class="button-group">
+        </section>
+
+        <div class="button-group" style="margin-top: 30px;">
             <a href="logout.php" class="btn" style="background:#f87171; color:white;">Cerrar Sesión</a>
         </div>
-    </div>
 
+    </main>
     
     <script src="js/main.js"></script>
     <script>
+        // Tu script de JS permanece exactamente igual, 
+        // ya que los IDs de los elementos HTML se han conservado.
         function actualizarSensores() {
             fetch('get_datos.php')
                 .then(respuesta => respuesta.json())
@@ -157,10 +169,10 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
                         } 
                         else {
                             tituloAcceso.innerText = "🟢 ACCESO LIBRE";
-                            tituloAcceso.style.color = "#4ade80";
+                            tituloAcceso.style.color = "#10B981"; // Cambiado al verde principal
                             textoEstado.innerText = "DESPEJADO";
                             textoEstado.style.color = "#ffffff";
-                            tarjeta.style.borderColor = "#4ade80";
+                            tarjeta.style.borderColor = "#10B981";
                             tarjeta.classList.remove("card-ocupada-anim");
                         }
                     }
