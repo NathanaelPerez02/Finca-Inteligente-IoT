@@ -41,6 +41,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <main class="login-main">
         <div class="card" style="max-width: 450px;">
+            <div class="img_index">
+            </div>
         <h2>Iniciar Sesión</h2>
         
          <?php if(!empty($error)) { echo "<p class='error'>$error</p>"; } ?>

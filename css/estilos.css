@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -14,47 +15,55 @@ body {
     align-items: center;
     min-height: 100vh;
 }
-.welcome-main{
-background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../images/fondo2.svg');    background-size: cover;
-    background-position: center;
+
+.img_index {
+    background-image: url("../images/farm_iot.svg");
+    background-size: contain;
+    background-position: center; 
     background-repeat: no-repeat;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px auto; 
+}
+
+/* Agrupamos ambas pantallas para optimizar código */
+.welcome-main, .login-main {
+    background-color: #031f14; 
+    background-image: 
+        radial-gradient(at 10% 10%, hsla(160, 100%, 15%, 1) 0px, transparent 50%),
+        radial-gradient(at 90% 10%, hsla(210, 100%, 10%, 1) 0px, transparent 50%),
+        radial-gradient(at 50% 90%, hsla(145, 100%, 20%, 1) 0px, transparent 50%),
+        radial-gradient(at 90% 90%, hsla(170, 100%, 12%, 1) 0px, transparent 50%),
+        radial-gradient(at 10% 90%, hsla(200, 100%, 8%, 1) 0px, transparent 50%);
+    background-size: cover;
     width: 100%;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.login-main{
-     background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../images/fondo3.svg');    background-size: cover;
-     background-position: center;
-     background-repeat: no-repeat;
-     width: 100%;
-     height: 100vh;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-    }
+
 .card, .welcome-container {
-     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
-    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
     padding: 40px;
     border-radius: 32px;
     width: 100%;
     max-width: 600px;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
 
-
-.welcome-container h1{
+.welcome-container h1 {
     font-weight: 700;
     font-size: 40px;
     color: #10B981;
     font-family: "Ubuntu", sans-serif;
 }
-.welcome-container h2{
+
+.welcome-container h2 {
     color: #F8FAFC;
     font-weight: 500;
 }
@@ -63,7 +72,6 @@ h2, h1 {
     margin-bottom: 20px;
     color: #10B981;
     font-family: 'Ubuntu', sans-serif;
-
 }
 
 p {
@@ -79,20 +87,24 @@ form {
 }
 
 input {
-    background: #121214;
-    border: 1px solid #3f3f46;
-    padding: 12px;
-    border-radius: 6px;
-    color: white;
-    font-size: 16px;
-    width: 100%;
+    background-color: #18231d; 
+    border: 1px solid #2d4a3e; 
+    color: #ffffff;
+    padding: 14px; 
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+input::placeholder {
+    color: #9ca3af; 
 }
 
 input:focus {
-    border-color:#10B981;
+    border-color: #10B981; 
     outline: none;
 }
 
+/* Estilo para el botón principal */
 button, .btn {
     background: #10B981;
     color: #121214;
@@ -104,11 +116,23 @@ button, .btn {
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.1s;
 }
 
 button:hover, .btn:hover {
-    background: #10B981;
+    background: #0ea5e9; /* Un cambio sutil de color si lo deseas, o mantenlo verde */
+}
+
+.btn-secundario {
+    background-color: #18231d !important; /* El mismo fondo oscuro de tus inputs */
+    color: #e5e7eb !important; /* Un blanco/gris muy claro y elegante */
+    border: 1px solid #2d4a3e !important; /* El mismo borde sutil de tus inputs */
+    transition: all 0.3s ease;
+}
+
+.btn-secundario:hover {
+    background-color: #2d4a3e !important; /* Se aclara ligeramente al pasar el cursor */
+    color: #ffffff !important;
 }
 
 .button-group {
@@ -142,4 +166,45 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* =========================================
+   ADAPTACIÓN PARA TELÉFONOS (Móvil)
+   ========================================= */
+@media (max-width: 600px) {
+    
+    .card, .welcome-container {
+        width: 90%; 
+        padding: 30px 20px;
+        border-radius: 24px;
+    }
+
+    .welcome-container h1, .card h1 {
+        font-size: 32px;
+    }
+    
+    .welcome-container h2, .card h2 {
+        font-size: 22px;
+    }
+
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .button-group .btn, 
+    button, 
+    input {
+        width: 100%;
+        text-align: center;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+    
+    .card a {
+        display: block;
+        margin-top: 10px;
+    }
 }
