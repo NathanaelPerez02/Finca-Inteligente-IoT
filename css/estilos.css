@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
-/* =========================================
-   RESET Y BASE
-   ========================================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -15,9 +13,7 @@ body {
     color: #ffffff;
 }
 
-/* =========================================
-   PANTALLAS DE BIENVENIDA Y LOGIN
-   ========================================= */
+
 .img_index {
     background-image: url("../images/farm_iot.svg");
     background-size: contain;
@@ -106,7 +102,6 @@ input:focus {
     outline: none;
 }
 
-/* Botones base y principales */
 button, .btn {
     background: #10B981;
     color: #121214;
@@ -125,7 +120,7 @@ button:hover, .btn:hover {
     background: #0ea5e9; 
 }
 
-/* Botón secundario (Registrarse) */
+
 .btn-secundario {
     background-color: #18231d !important; 
     color: #e5e7eb !important; 
@@ -171,9 +166,7 @@ a:hover {
     text-decoration: underline;
 }
 
-/* =========================================
-   PANEL DE CONTROL (DASHBOARD)
-   ========================================= */
+
    .dashboard{
      background-color: #031f14; 
     background-image: 
@@ -277,20 +270,20 @@ a:hover {
 
 .table-historial th {
     color: #a1a1aa;
-    padding: 12px 15px; /* Más espacio a los lados */
-    border-bottom: 1px solid #3f3f46; /* Línea divisoria inferior */
+    padding: 12px 15px; 
+    border-bottom: 1px solid #3f3f46; 
     white-space: nowrap; 
     font-weight: normal;
 }
 
 .table-historial td {
     color: #ffffff;
-    padding: 15px 15px; /* Más espacio arriba y a los lados */
-    border-bottom: 1px solid #2d2d35; /* Línea divisoria tenue entre filas */
+    padding: 15px 15px; 
+    border-bottom: 1px solid #2d2d35; 
     white-space: nowrap; 
 }
 
-/* Quita la línea de la última fila para que se vea más limpio */
+
 .table-historial tbody tr:last-child td {
     border-bottom: none;
 }
@@ -300,7 +293,7 @@ a:hover {
 }
 
 @media (max-width: 768px) {
-    /* La cuadrícula de 2x2 pasa a ser de 1 sola columna vertical */
+    
     .cards-grid {
         grid-template-columns: 1fr; 
     }
@@ -313,7 +306,6 @@ a:hover {
         font-size: 3rem !important; 
     }
 
-    /* Apilamos los botones del portón y los estiramos a lo ancho */
     .puerta-controles {
         flex-direction: column;
         gap: 15px;
@@ -324,10 +316,8 @@ a:hover {
     }
 }
 
-/* Adaptación para Bienvenida, Login y pantallas pequeñas */
 @media (max-width: 600px) {
     
-    /* Ajuste de la tarjeta principal para que respire */
     .card, .welcome-container {
         width: 90%; 
         padding: 30px 20px;
@@ -342,14 +332,12 @@ a:hover {
         font-size: 22px;
     }
 
-    /* Apilamos los grupos de botones (como el de Iniciar/Registrarse) */
     .button-group {
         flex-direction: column;
         gap: 15px;
         width: 100%;
     }
 
-    /* Aseguramos que los inputs y botones sean fáciles de tocar */
     .button-group .btn, 
     button, 
     input {
@@ -364,7 +352,6 @@ a:hover {
         margin-top: 10px;
     }
 
-    /* Apilamos también los botones de AUTO/MANUAL para que no se aprieten */
     .toggle-buttons {
         flex-direction: column;
         gap: 10px;
@@ -372,5 +359,14 @@ a:hover {
     
     .toggle-buttons button {
         width: 100%;
+    }
+    form button[onclick^="togglePass"] {
+        width: auto !important;
+        padding: 10px !important;
+        text-align: right;
+    }
+
+    #pass_login {
+        padding-right: 45px !important;
     }
 }
