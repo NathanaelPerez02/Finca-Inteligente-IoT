@@ -67,12 +67,12 @@ function actualizarSensores() {
  
             if (distancia <= 30) {
                 tituloAcceso.innerText        = "ESTADO DE LA PLUMA";
-                tituloAcceso.style.color      = "#f87171";
+                tituloAcceso.style.color      = "white";
                 tarjetaAcceso.style.borderColor = "#f87171";
                 tarjetaAcceso.classList.add("card-ocupada-anim");
             } else {
                 tituloAcceso.innerText        = "ESTADO DE LA PLUMA";
-                tituloAcceso.style.color      = "#4ade80";
+                tituloAcceso.style.color      = "white";
                 tarjetaAcceso.style.borderColor = "#4ade80";
                 tarjetaAcceso.classList.remove("card-ocupada-anim");
             }
