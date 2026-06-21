@@ -126,7 +126,7 @@ button,
 
 button:hover,
 .btn:hover {
-    background: #0ea5e9;
+    background: #0ee98e;
 }
 
 /* Botón secundario (Registrarse) */
@@ -403,7 +403,7 @@ a:hover {
         color: #a1a1aa;
         font-size: 1.5rem;
         cursor: pointer;
-        /* Cambiamos el float por absolute y anulamos el ancho del 100% del móvil */
+        
         position: absolute;
         top: 15px;
         right: 20px;
