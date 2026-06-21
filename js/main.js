@@ -72,7 +72,7 @@ function actualizarSensores() {
                 tarjetaAcceso.classList.add("card-ocupada-anim");
             } else {
                 tituloAcceso.innerText        = "ESTADO DE LA PLUMA";
-                tituloAcceso.style.color      = "white";
+                tituloAcceso.style.color      = "#ffffff";
                 tarjetaAcceso.style.borderColor = "#4ade80";
                 tarjetaAcceso.classList.remove("card-ocupada-anim");
             }
@@ -81,12 +81,12 @@ function actualizarSensores() {
                 textoPuerta.innerText           = "ABIERTA";
                 textoPuerta.style.color         = "#f87171";
                 tarjetaAcceso.style.borderColor = "#f87171";
-                tituloAcceso.style.color        = "#f87171";
+                tituloAcceso.style.color        = "#ffffff";
             } else {
                 textoPuerta.innerText           = "CERRADA";
                 textoPuerta.style.color         = "#4ade80";
                 tarjetaAcceso.style.borderColor = "#4ade80";
-                tituloAcceso.style.color        = "#4ade80";
+                tituloAcceso.style.color        = "#ffffff";
             }
         }
     })
