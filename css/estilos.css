@@ -326,6 +326,71 @@ a:hover {
     animation: pulso-rojo 1.5s infinite !important;
 }
 
+.btn-abrir, .btn-cerrar {
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    width: 100%; /* Ocupan todo el ancho en móvil */
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Estilo para Abrir (Verde IoT) */
+.btn-abrir {
+    background-color: #18231d;
+    color: #10B981;
+    border: 2px solid #10B981;
+}
+
+.btn-abrir:hover {
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+/* Estilo para Cerrar (Rojo Alerta) */
+.btn-cerrar {
+    background-color: #231818;
+    color: #f87171;
+    border: 2px solid #f87171;
+}
+
+.btn-cerrar:hover {
+    background-color: rgba(248, 113, 113, 0.1);
+}
+
+/* =========================================
+   TABLA DE HISTORIAL RESPONSIVA
+   ========================================= */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto; /* Permite scroll horizontal solo dentro de la tabla */
+    -webkit-overflow-scrolling: touch; /* Scroll suave en móviles */
+    margin-top: 15px;
+}
+
+.table-historial {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem; /* Letra un poco más pequeña para encajar mejor */
+    text-align: center;
+}
+
+.table-historial th {
+    color: #a1a1aa;
+    padding: 10px;
+    border-bottom: 1px solid #3f3f46;
+    white-space: nowrap; /* Evita que los títulos se partan en dos líneas */
+}
+
+.table-historial td {
+    color: #ffffff;
+    padding: 12px 10px;
+    border-bottom: 1px solid #2d2d35;
+    white-space: nowrap; /* Mantiene la fecha en una sola línea */
+}
+
 /* =========================================
    ADAPTACIÓN PARA TELÉFONOS (Móvil y Tablets)
    ========================================= */

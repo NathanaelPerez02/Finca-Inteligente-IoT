@@ -34,21 +34,6 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Principal - Finca Inteligente</title>
     <link rel="stylesheet" href="css/estilos.css">
-    <style>
-        /* Mantenemos tu animación de alerta roja aquí o pásala a estilos.css */
-        @keyframes pulso-rojo {
-            0% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.5); border-color: rgba(248, 113, 113, 0.6); }
-            70% { box-shadow: 0 0 0 10px rgba(248, 113, 113, 0); border-color: rgba(248, 113, 113, 1); }
-            100% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0); border-color: rgba(248, 113, 113, 0.6); }
-        }
-        .card-ocupada-anim {
-            animation: pulso-rojo 1.5s infinite;
-        }
-        /* Transición suave para cuando cambia el color del borde por JS */
-        #tarjeta_acceso {
-            transition: all 0.3s ease;
-        }
-    </style>
 </head>
 <body>
     <main class="dashboard-container">
@@ -89,6 +74,11 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
 
         </section>
 
+        <section class="puerta-controles" style="margin-bottom: 30px;">
+            <button class="btn-abrir">Abrir Portón</button>
+            <button class="btn-cerrar">Cerrar Portón</button>
+        </section>
+
         <section class="control-section">
             
             <div class="dash-card card-form">
@@ -108,6 +98,39 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
                     
                     <button type="submit" name="actualizar_umbrales" class="btn">Guardar Configuración</button>
                 </form>
+            </div>
+
+            <div class="dash-card card-form">
+                <h3 style="color: #a78bfa; margin-bottom: 10px;">📋 Historial de Lecturas</h3>
+                
+                <div class="table-responsive">
+                    <table class="table-historial">
+                        <thead>
+                            <tr>
+                                <th>Fecha y Hora</th>
+                                <th>Humedad (%)</th>
+                                <th>Piscina (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2026-06-16_11:24:30</td>
+                                <td class="text-yellow">0%</td>
+                                <td class="text-blue">0%</td>
+                            </tr>
+                            <tr>
+                                <td>2026-06-16_11:23:58</td>
+                                <td class="text-yellow">0%</td>
+                                <td class="text-blue">61%</td>
+                            </tr>
+                            <tr>
+                                <td>2026-06-16_11:23:28</td>
+                                <td class="text-yellow">0%</td>
+                                <td class="text-blue">42%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="dash-card card-form">
@@ -132,8 +155,6 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
     
     <script src="js/main.js"></script>
     <script>
-        // Tu script de JS permanece exactamente igual, 
-        // ya que los IDs de los elementos HTML se han conservado.
         function actualizarSensores() {
             fetch('get_datos.php')
                 .then(respuesta => respuesta.json())
@@ -169,7 +190,7 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
                         } 
                         else {
                             tituloAcceso.innerText = "🟢 ACCESO LIBRE";
-                            tituloAcceso.style.color = "#10B981"; // Cambiado al verde principal
+                            tituloAcceso.style.color = "#10B981"; 
                             textoEstado.innerText = "DESPEJADO";
                             textoEstado.style.color = "#ffffff";
                             tarjeta.style.borderColor = "#10B981";
