@@ -161,19 +161,19 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
                 <input type="hidden" name="usuario" value="<?php echo htmlspecialchars($datos_user['usuario'] ?? 'oldtote'); ?>">
                 <input type="number" name="agua" placeholder="Nivel Piscina (%)" required style="flex: 1; min-width: 120px;">
                 <input type="number" name="humedad" placeholder="Humedad Suelo (%)" required style="flex: 1; min-width: 120px;">
-                <button type="submit" style="background: #10B981; color: white;">Simular Envío</button>
+                <button type="submit" style="background: #10B981; color: #18231d;">Simular Envío</button>
             </form>
         </div>
 
         <div class="button-group">
-            <a href="logout.php" class="btn" style="background:#ff5757; color:white;">Cerrar Sesión</a>
+            <a href="logout.php" class="btn" style="background:#ff5757; color: #18231d;">Cerrar Sesión</a>
         </div>
     </div>
 
     <div id="modalAbrir" class="modal-overlay">
         <div class="modal-content">
             <button class="btn-cerrar" onclick="cerrarModal('modalAbrir')">&times;</button>
-            <h3 style="color: #10B981; margin-top: 0;">Confirmar Apertura</h3>
+            <h3 style="color: #18231d; margin-top: 0;">Confirmar Apertura</h3>
             <p style="color: #a1a1aa; font-size: 14px;">Ingrese su contraseña maestra para abrir la tranquera remotamente.</p>
             <input type="password" id="pass_abrir" class="modal-input" placeholder="Contraseña...">
             <button class="btn-accion" style="background: #10B981; color: white;" onclick="ejecutarAccion('abrir_porton')">ABRIR PORTÓN</button>
