@@ -47,14 +47,15 @@ body {
 .card, .welcome-container {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px); 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
     padding: 40px;
     border-radius: 32px;
     width: 100%;
     max-width: 600px;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.08); 
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+   
 }
 
 .welcome-container h1 {
@@ -173,11 +174,22 @@ a:hover {
 /* =========================================
    PANEL DE CONTROL (DASHBOARD)
    ========================================= */
+   .dashboard{
+     background-color: #031f14; 
+    background-image: 
+        radial-gradient(at 10% 10%, hsla(160, 100%, 15%, 1) 0px, transparent 50%),
+        radial-gradient(at 90% 10%, hsla(210, 100%, 10%, 1) 0px, transparent 50%),
+        radial-gradient(at 50% 90%, hsla(145, 100%, 20%, 1) 0px, transparent 50%),
+        radial-gradient(at 90% 90%, hsla(170, 100%, 12%, 1) 0px, transparent 50%),
+        radial-gradient(at 10% 90%, hsla(200, 100%, 8%, 1) 0px, transparent 50%);
+    background-size: cover;
+   }
 .dashboard-container {
     max-width: 900px;
     margin: 40px auto;
     padding: 0 20px;
     color: #ffffff;
+    
 }
 
 .dashboard-header {
@@ -206,7 +218,7 @@ a:hover {
 }
 
 .dash-card {
-    background-color: #1e1e24; 
+    background-color: #18231d; 
     border-radius: 12px;
     padding: 25px;
     text-align: center;
@@ -240,5 +252,50 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 20px;
+}
+
+.toggle-buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; 
+}
+
+.table-historial {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem; 
+    text-align: center;
+}
+
+.table-historial th {
+    color: #a1a1aa;
+    padding: 12px 15px; /* Más espacio a los lados */
+    border-bottom: 1px solid #3f3f46; /* Línea divisoria inferior */
+    white-space: nowrap; 
+    font-weight: normal;
+}
+
+.table-historial td {
+    color: #ffffff;
+    padding: 15px 15px; /* Más espacio arriba y a los lados */
+    border-bottom: 1px solid #2d2d35; /* Línea divisoria tenue entre filas */
+    white-space: nowrap; 
+}
+
+/* Quita la línea de la última fila para que se vea más limpio */
+.table-historial tbody tr:last-child td {
+    border-bottom: none;
+}
+.dash-card{
+    margin-top: 10px;
+  
 }
 
