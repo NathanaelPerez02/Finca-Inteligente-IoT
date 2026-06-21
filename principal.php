@@ -176,7 +176,7 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
             <h3 style="color: #18231d; margin-top: 0;">Confirmar Apertura</h3>
             <p style="color: #a1a1aa; font-size: 14px;">Ingrese su contraseña maestra para abrir la tranquera remotamente.</p>
             <input type="password" id="pass_abrir" class="modal-input" placeholder="Contraseña...">
-            <button class="btn-accion" style="background: #10B981; color: white;" onclick="ejecutarAccion('abrir_porton')">ABRIR PORTÓN</button>
+            <button class="btn-accion" style="background: #10B981; color: #18231d;" onclick="ejecutarAccion('abrir_porton')">ABRIR PORTÓN</button>
         </div>
     </div>
 
@@ -187,7 +187,7 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
             <input type="text" id="uid_tarjeta" class="modal-input" placeholder="UID (Ej: 3A F4 12 89)">
             <input type="text" id="desc_tarjeta" class="modal-input" placeholder="Descripción (Ej: Llavero Papá)">
             <input type="password" id="pass_tarjeta" class="modal-input" placeholder="Contraseña maestra...">
-            <button class="btn-accion" style="background: #10B981; color: white;" onclick="ejecutarAccion('agregar_tarjeta')">GUARDAR TARJETA</button>
+            <button class="btn-accion" style="background: #10B981; color: #18231d;" onclick="ejecutarAccion('agregar_tarjeta')">GUARDAR TARJETA</button>
         </div>
     </div>
 
