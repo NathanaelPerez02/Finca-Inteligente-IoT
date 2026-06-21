@@ -39,7 +39,7 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
     <main class="dashboard-container">
         
         <header class="dashboard-header">
-            <h1>🌱 Panel de Control</h1>
+            <h1>Panel de Control</h1>
             <p>Bienvenido al sistema de monitoreo, <strong><?php echo htmlspecialchars($_SESSION['usuario']); ?></strong>.</p>
         </header>
 
@@ -50,7 +50,14 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
                 <h2 id="estado_acceso">DESPEJADO</h2>
                 <p id="distancia_real">Distancia detectada: <?php echo $distancia_inicial; ?> cm</p>
             </div>
-
+            <div class="dash-card">
+                 <h3>MODO DEL SISTEMA</h3>
+                 <h2 class="text-green">AUTOMÁTICO</h2>
+                 <div class="toggle-buttons">
+                     <button class="btn-active">AUTO</button>
+                     <button class="btn-inactive">MANUAL</button>
+                 </div>
+            </div>
             <div class="dash-card">
                 <h3 class="text-blue">💧 Nivel de Piscina</h3>
                 <h2 id="valor_agua" class="data-value"><?php echo htmlspecialchars($datos_user['agua_actual'] ?? '0'); ?>%</h2>
@@ -61,15 +68,6 @@ $distancia_inicial = (int)($datos_user['acceso_actual'] ?? 100);
                 <h3 class="text-yellow">🪴 Humedad de Suelo</h3>
                 <h2 id="valor_humedad" class="data-value"><?php echo htmlspecialchars($datos_user['humedad_actual'] ?? '0'); ?>%</h2>
                 <p>Umbral de alerta: <?php echo htmlspecialchars($datos_user['umbral_humedad'] ?? '30'); ?>%</p>
-            </div>
-
-            <div class="dash-card">
-                 <h3>MODO DEL SISTEMA</h3>
-                 <h2 class="text-green">AUTOMÁTICO</h2>
-                 <div class="toggle-buttons">
-                     <button class="btn-active">AUTO</button>
-                     <button class="btn-inactive">MANUAL</button>
-                 </div>
             </div>
 
         </section>

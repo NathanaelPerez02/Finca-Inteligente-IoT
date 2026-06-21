@@ -236,3 +236,9 @@ a:hover {
     font-weight: bold;
 }
 
+.puerta-controles{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
