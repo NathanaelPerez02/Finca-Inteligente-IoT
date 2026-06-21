@@ -299,3 +299,78 @@ a:hover {
   
 }
 
+@media (max-width: 768px) {
+    /* La cuadrícula de 2x2 pasa a ser de 1 sola columna vertical */
+    .cards-grid {
+        grid-template-columns: 1fr; 
+    }
+    
+    .dashboard-header h1 {
+        font-size: 2rem;
+    }
+    
+    .data-value {
+        font-size: 3rem !important; 
+    }
+
+    /* Apilamos los botones del portón y los estiramos a lo ancho */
+    .puerta-controles {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .puerta-controles button {
+        width: 100%;
+    }
+}
+
+/* Adaptación para Bienvenida, Login y pantallas pequeñas */
+@media (max-width: 600px) {
+    
+    /* Ajuste de la tarjeta principal para que respire */
+    .card, .welcome-container {
+        width: 90%; 
+        padding: 30px 20px;
+        border-radius: 24px;
+    }
+
+    .welcome-container h1, .card h1 {
+        font-size: 32px;
+    }
+    
+    .welcome-container h2, .card h2 {
+        font-size: 22px;
+    }
+
+    /* Apilamos los grupos de botones (como el de Iniciar/Registrarse) */
+    .button-group {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    /* Aseguramos que los inputs y botones sean fáciles de tocar */
+    .button-group .btn, 
+    button, 
+    input {
+        width: 100%;
+        text-align: center;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+    
+    .card a {
+        display: block;
+        margin-top: 10px;
+    }
+
+    /* Apilamos también los botones de AUTO/MANUAL para que no se aprieten */
+    .toggle-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .toggle-buttons button {
+        width: 100%;
+    }
+}
