@@ -103,7 +103,7 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
             <button id="btn_abrir" class="btn" onclick="abrirModal('modalAbrir')" style="background: #10B981; display: none;">
                 Abrir Portón
             </button>
-            <button id="btn_cerrar" class="btn" onclick="ejecutarAccion('cerrar_porton')" style="background: #18231d; display: none;">
+            <button id="btn_cerrar" class="btn" onclick="ejecutarAccion('cerrar_porton')" style="color: white; background: #18231d; display: none;">
                 Cerrar Portón
             </button>
         </div>
