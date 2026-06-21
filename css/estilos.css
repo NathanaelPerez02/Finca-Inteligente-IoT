@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
-
+/* =========================================
+   RESET Y BASE
+   ========================================= */
 * {
     margin: 0;
     padding: 0;
@@ -13,7 +15,9 @@ body {
     color: #ffffff;
 }
 
-
+/* =========================================
+   PANTALLAS DE BIENVENIDA Y LOGIN
+   ========================================= */
 .img_index {
     background-image: url("../images/farm_iot.svg");
     background-size: contain;
@@ -51,7 +55,6 @@ body {
     width: 100%;
     max-width: 600px;
     text-align: center;
-   
 }
 
 .welcome-container h1 {
@@ -102,6 +105,7 @@ input:focus {
     outline: none;
 }
 
+/* Botones base y principales */
 button, .btn {
     background: #10B981;
     color: #121214;
@@ -120,7 +124,7 @@ button:hover, .btn:hover {
     background: #0ea5e9; 
 }
 
-
+/* Botón secundario (Registrarse) */
 .btn-secundario {
     background-color: #18231d !important; 
     color: #e5e7eb !important; 
@@ -166,9 +170,11 @@ a:hover {
     text-decoration: underline;
 }
 
-
-   .dashboard{
-     background-color: #031f14; 
+/* =========================================
+   PANEL DE CONTROL (DASHBOARD)
+   ========================================= */
+.dashboard {
+    background-color: #031f14; 
     background-image: 
         radial-gradient(at 10% 10%, hsla(160, 100%, 15%, 1) 0px, transparent 50%),
         radial-gradient(at 90% 10%, hsla(210, 100%, 10%, 1) 0px, transparent 50%),
@@ -176,13 +182,13 @@ a:hover {
         radial-gradient(at 90% 90%, hsla(170, 100%, 12%, 1) 0px, transparent 50%),
         radial-gradient(at 10% 90%, hsla(200, 100%, 8%, 1) 0px, transparent 50%);
     background-size: cover;
-   }
+}
+
 .dashboard-container {
     max-width: 900px;
     margin: 40px auto;
     padding: 0 20px;
     color: #ffffff;
-    
 }
 
 .dashboard-header {
@@ -218,6 +224,7 @@ a:hover {
     border: 2px solid #2d2d35; 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease; 
+    margin-top: 10px;
 }
 
 .border-green { border-color: #10B981; }
@@ -241,14 +248,14 @@ a:hover {
     font-weight: bold;
 }
 
-.puerta-controles{
+.puerta-controles {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 20px;
 }
 
-.toggle-buttons{
+.toggle-buttons {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -283,17 +290,11 @@ a:hover {
     white-space: nowrap; 
 }
 
-
 .table-historial tbody tr:last-child td {
     border-bottom: none;
 }
-.dash-card{
-    margin-top: 10px;
-  
-}
 
 @media (max-width: 768px) {
-    
     .cards-grid {
         grid-template-columns: 1fr; 
     }
@@ -316,8 +317,8 @@ a:hover {
     }
 }
 
+/* Adaptación para Bienvenida, Login y pantallas pequeñas */
 @media (max-width: 600px) {
-    
     .card, .welcome-container {
         width: 90%; 
         padding: 30px 20px;
@@ -360,6 +361,8 @@ a:hover {
     .toggle-buttons button {
         width: 100%;
     }
+    
+    /* CORRECCIÓN DEL OJITO EN MÓVIL (NO SE BORRA) */
     form button[onclick^="togglePass"] {
         width: auto !important;
         padding: 10px !important;
