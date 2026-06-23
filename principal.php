@@ -153,17 +153,6 @@ $query_historial = mysqli_query($conn, "SELECT humedad, agua, fecha FROM histori
             </div>
         </div>
 
-        <div class="dash-card" style="margin-bottom: 30px;">
-            <h3 style="color: white; margin-bottom: 10px;">Simulador de Hardware</h3>
-            <p style="color: #a1a1aa; font-size: 14px; margin-bottom: 15px;">Usa este panel para simular los datos que enviaría la placa física.</p>
-            
-            <form action="api_sensores.php" target="_blank" method="GET" style="flex-direction: row; flex-wrap: wrap;">
-                <input type="hidden" name="usuario" value="<?php echo htmlspecialchars($datos_user['usuario'] ?? 'oldtote'); ?>">
-                <input type="number" name="agua" placeholder="Nivel Piscina (%)" required style="flex: 1; min-width: 120px;">
-                <input type="number" name="humedad" placeholder="Humedad Suelo (%)" required style="flex: 1; min-width: 120px;">
-                <button type="submit" style="background: #10B981; color: #18231d;">Simular Envío</button>
-            </form>
-        </div>
 
         <div class="button-group">
             <a href="logout.php" class="btn" style="background:#ff5757; color: #18231d;">Cerrar Sesión</a>
